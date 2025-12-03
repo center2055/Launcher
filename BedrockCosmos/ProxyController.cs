@@ -33,7 +33,7 @@ namespace Titanium.Web.Proxy.Examples.Basic
 
         private ExplicitProxyEndPoint explicitEndPoint;
 
-        string currentPathForResponse = AppDomain.CurrentDomain.BaseDirectory + @"Responses-Main\";
+        string currentPathForResponse = AppDomain.CurrentDomain.BaseDirectory + @"Responses-main\";
 
         public ProxyController()
         {
@@ -358,14 +358,10 @@ namespace Titanium.Web.Proxy.Examples.Basic
                     {
                         if (File.Exists(localPath))
                         {
+                            e.HttpClient.Response.StatusCode = 200; // Set to OK, otherwise stays at a not found error
                             string jsonContent = File.ReadAllText(localPath);
-                            e.HttpClient.Response.StatusCode = 200; // OK
-                            e.HttpClient.Response.ContentType = "application/json";
-
-                            Console.WriteLine("Local path is " + localPath);
                             e.SetResponseBodyString(jsonContent); // Replace response with local json
                             Console.WriteLine($"[+] Replaced response for {e.HttpClient.Request.Url}");
-                            e.TerminateSession();
                         }
                         else
                         {
