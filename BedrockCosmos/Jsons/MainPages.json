@@ -9,7 +9,15 @@
   },
   {
     "url": "https://store.mktpl.minecraft-services.net/api/v1.0/layout/pages/MultiItemPage_BedrockCosmosMarketplaceCategoryPage",
+    "response": "MainPages\\MainMarketplacePage.json"
+  },
+  {
+    "url": "https://store.mktpl.minecraft-services.net/api/v1.0/layout/pages/MultiItemPage_LegacyVault",
     "response": "MainPages\\MinecraftHidden.json"
+  },
+  {
+    "url": "https://store.mktpl.minecraft-services.net/api/v1.0/layout/pages/MultiItemPage_MinecraftRestored",
+    "response": "MainPages\\MinecraftRestored.json"
   },
   {
     "url": "https://20ca2.playfabapi.com/Catalog/GetPublishedItem",
