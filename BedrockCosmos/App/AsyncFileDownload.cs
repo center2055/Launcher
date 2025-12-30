@@ -58,16 +58,16 @@ namespace BedrockCosmos.App
                             entry.ExtractToFile(destinationFilePath, overwrite: true);
                     }
                 }
+
+                if (deleteAfterExtracting)
+                {
+                    File.Delete(zipFilePath);
+                    CosmosConsole.WriteLine(consoleSender, $"Removed {Path.GetFileName(zipFilePath)} file.");
+                }
             });
 
             CosmosConsole.WriteLine(consoleSender, $"Successfully extracted {Path.GetFileName(zipFilePath)} to " +
                 $"{extractPath}");
-
-            if (deleteAfterExtracting)
-            {
-                File.Delete(zipFilePath);
-                CosmosConsole.WriteLine(consoleSender, $"Removed {Path.GetFileName(zipFilePath)} file.");
-            }
         }
 
         internal void Dispose()

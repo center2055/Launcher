@@ -28,11 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.StatusLabel = new System.Windows.Forms.Label();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.HomePage = new System.Windows.Forms.TabPage();
+            this.SettingsButton = new System.Windows.Forms.Button();
             this.SettingsPage = new System.Windows.Forms.TabPage();
+            this.SettingsBackButton = new System.Windows.Forms.Button();
+            this.BackgroundModeDescriptionLabel = new System.Windows.Forms.Label();
+            this.BackgroundModeTitleLabel = new System.Windows.Forms.Label();
             this.DevPage = new System.Windows.Forms.TabPage();
             this.DevBackButton = new System.Windows.Forms.Button();
             this.DevConsole = new System.Windows.Forms.RichTextBox();
@@ -43,7 +48,18 @@
             this.TopLabel = new System.Windows.Forms.Label();
             this.MinimizeButton = new System.Windows.Forms.Button();
             this.CloseButton = new System.Windows.Forms.Button();
+            this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.BackgroundModeTimer = new System.Windows.Forms.Timer(this.components);
+            this.AboutButton = new System.Windows.Forms.Button();
+            this.AboutPage = new System.Windows.Forms.TabPage();
+            this.AboutBackButton = new System.Windows.Forms.Button();
+            this.AboutLabel = new System.Windows.Forms.Label();
+            this.GitHubIcon = new System.Windows.Forms.PictureBox();
+            this.DiscordIcon = new System.Windows.Forms.PictureBox();
+            this.DiscordLabel = new System.Windows.Forms.LinkLabel();
+            this.GitHubLabel = new System.Windows.Forms.LinkLabel();
             this.LaunchButton = new BedrockCosmos.App.UI.RoundGradientButton();
+            this.BackgroundModeSwitch = new BedrockCosmos.App.UI.Switch();
             this.DisableDevMenuButton = new BedrockCosmos.App.UI.RoundButton();
             this.ClearLogsButton = new BedrockCosmos.App.UI.RoundButton();
             this.EnableLoggingSwitch = new BedrockCosmos.App.UI.Switch();
@@ -51,19 +67,23 @@
             this.ExportLogsButton = new BedrockCosmos.App.UI.RoundButton();
             this.TabControl.SuspendLayout();
             this.HomePage.SuspendLayout();
+            this.SettingsPage.SuspendLayout();
             this.DevPage.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppIcon)).BeginInit();
+            this.AboutPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GitHubIcon)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DiscordIcon)).BeginInit();
             this.SuspendLayout();
             // 
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 8F);
-            this.StatusLabel.ForeColor = System.Drawing.Color.White;
-            this.StatusLabel.Location = new System.Drawing.Point(227, 278);
+            this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.StatusLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.StatusLabel.Location = new System.Drawing.Point(368, 278);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(57, 13);
+            this.StatusLabel.Size = new System.Drawing.Size(64, 19);
             this.StatusLabel.TabIndex = 2;
             this.StatusLabel.Text = "Waiting...";
             this.StatusLabel.Visible = false;
@@ -71,6 +91,7 @@
             // TabControl
             // 
             this.TabControl.Controls.Add(this.HomePage);
+            this.TabControl.Controls.Add(this.AboutPage);
             this.TabControl.Controls.Add(this.SettingsPage);
             this.TabControl.Controls.Add(this.DevPage);
             this.TabControl.Location = new System.Drawing.Point(-5, -5);
@@ -82,6 +103,8 @@
             // HomePage
             // 
             this.HomePage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.HomePage.Controls.Add(this.AboutButton);
+            this.HomePage.Controls.Add(this.SettingsButton);
             this.HomePage.Controls.Add(this.LaunchButton);
             this.HomePage.Controls.Add(this.StatusLabel);
             this.HomePage.Location = new System.Drawing.Point(4, 22);
@@ -89,35 +112,98 @@
             this.HomePage.Padding = new System.Windows.Forms.Padding(3);
             this.HomePage.Size = new System.Drawing.Size(806, 440);
             this.HomePage.TabIndex = 0;
-            this.HomePage.Text = "Home Page";
+            this.HomePage.Text = "Home";
+            // 
+            // SettingsButton
+            // 
+            this.SettingsButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SettingsButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("SettingsButton.BackgroundImage")));
+            this.SettingsButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.SettingsButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SettingsButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.SettingsButton.FlatAppearance.BorderSize = 0;
+            this.SettingsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.SettingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.SettingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SettingsButton.Location = new System.Drawing.Point(760, 391);
+            this.SettingsButton.Name = "SettingsButton";
+            this.SettingsButton.Size = new System.Drawing.Size(25, 25);
+            this.SettingsButton.TabIndex = 16;
+            this.SettingsButton.UseVisualStyleBackColor = true;
+            this.SettingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
             // SettingsPage
             // 
             this.SettingsPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.SettingsPage.Controls.Add(this.SettingsBackButton);
+            this.SettingsPage.Controls.Add(this.BackgroundModeDescriptionLabel);
+            this.SettingsPage.Controls.Add(this.BackgroundModeTitleLabel);
+            this.SettingsPage.Controls.Add(this.BackgroundModeSwitch);
             this.SettingsPage.Location = new System.Drawing.Point(4, 22);
             this.SettingsPage.Name = "SettingsPage";
             this.SettingsPage.Padding = new System.Windows.Forms.Padding(3);
             this.SettingsPage.Size = new System.Drawing.Size(806, 440);
             this.SettingsPage.TabIndex = 1;
-            this.SettingsPage.Text = "Settings Page";
+            this.SettingsPage.Text = "Settings";
+            // 
+            // SettingsBackButton
+            // 
+            this.SettingsBackButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SettingsBackButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("SettingsBackButton.BackgroundImage")));
+            this.SettingsBackButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.SettingsBackButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SettingsBackButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.SettingsBackButton.FlatAppearance.BorderSize = 0;
+            this.SettingsBackButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.SettingsBackButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.SettingsBackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SettingsBackButton.Location = new System.Drawing.Point(15, 391);
+            this.SettingsBackButton.Name = "SettingsBackButton";
+            this.SettingsBackButton.Size = new System.Drawing.Size(25, 25);
+            this.SettingsBackButton.TabIndex = 15;
+            this.SettingsBackButton.UseVisualStyleBackColor = true;
+            this.SettingsBackButton.Click += new System.EventHandler(this.ReturnToHomeScreen);
+            // 
+            // BackgroundModeDescriptionLabel
+            // 
+            this.BackgroundModeDescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.BackgroundModeDescriptionLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.BackgroundModeDescriptionLabel.Location = new System.Drawing.Point(270, 40);
+            this.BackgroundModeDescriptionLabel.Name = "BackgroundModeDescriptionLabel";
+            this.BackgroundModeDescriptionLabel.Size = new System.Drawing.Size(506, 61);
+            this.BackgroundModeDescriptionLabel.TabIndex = 14;
+            this.BackgroundModeDescriptionLabel.Text = "When enabled, Bedrock Cosmos will minimize to the system tray instead of the task" +
+    "bar. The proxy service will also automatically start/stop when Minecraft is open" +
+    "ed/closed, respectively.";
+            // 
+            // BackgroundModeTitleLabel
+            // 
+            this.BackgroundModeTitleLabel.AutoSize = true;
+            this.BackgroundModeTitleLabel.Font = new System.Drawing.Font("Segoe UI", 16F);
+            this.BackgroundModeTitleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.BackgroundModeTitleLabel.Location = new System.Drawing.Point(71, 52);
+            this.BackgroundModeTitleLabel.Name = "BackgroundModeTitleLabel";
+            this.BackgroundModeTitleLabel.Size = new System.Drawing.Size(193, 30);
+            this.BackgroundModeTitleLabel.TabIndex = 13;
+            this.BackgroundModeTitleLabel.Text = "Background Mode";
             // 
             // DevPage
             // 
             this.DevPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.DevPage.Controls.Add(this.DevBackButton);
-            this.DevPage.Controls.Add(this.DisableDevMenuButton);
             this.DevPage.Controls.Add(this.DevConsole);
-            this.DevPage.Controls.Add(this.ClearLogsButton);
             this.DevPage.Controls.Add(this.EnableLoggingLabel);
+            this.DevPage.Controls.Add(this.DownloadZipProgressLabel);
+            this.DevPage.Controls.Add(this.DisableDevMenuButton);
+            this.DevPage.Controls.Add(this.ClearLogsButton);
             this.DevPage.Controls.Add(this.EnableLoggingSwitch);
             this.DevPage.Controls.Add(this.DownloadZipButton);
             this.DevPage.Controls.Add(this.ExportLogsButton);
-            this.DevPage.Controls.Add(this.DownloadZipProgressLabel);
             this.DevPage.Location = new System.Drawing.Point(4, 22);
             this.DevPage.Name = "DevPage";
             this.DevPage.Size = new System.Drawing.Size(806, 440);
             this.DevPage.TabIndex = 2;
-            this.DevPage.Text = "Dev Page";
+            this.DevPage.Text = "Dev";
             // 
             // DevBackButton
             // 
@@ -135,7 +221,7 @@
             this.DevBackButton.Size = new System.Drawing.Size(25, 25);
             this.DevBackButton.TabIndex = 4;
             this.DevBackButton.UseVisualStyleBackColor = true;
-            this.DevBackButton.Click += new System.EventHandler(this.DevBackButton_Click);
+            this.DevBackButton.Click += new System.EventHandler(this.ReturnToHomeScreen);
             // 
             // DevConsole
             // 
@@ -163,11 +249,12 @@
             // 
             // DownloadZipProgressLabel
             // 
+            this.DownloadZipProgressLabel.AutoSize = true;
             this.DownloadZipProgressLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.DownloadZipProgressLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-            this.DownloadZipProgressLabel.Location = new System.Drawing.Point(161, 43);
+            this.DownloadZipProgressLabel.Location = new System.Drawing.Point(163, 52);
             this.DownloadZipProgressLabel.Name = "DownloadZipProgressLabel";
-            this.DownloadZipProgressLabel.Size = new System.Drawing.Size(121, 38);
+            this.DownloadZipProgressLabel.Size = new System.Drawing.Size(99, 19);
             this.DownloadZipProgressLabel.TabIndex = 4;
             this.DownloadZipProgressLabel.Text = "Downloading...";
             this.DownloadZipProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -250,6 +337,132 @@
             this.CloseButton.UseVisualStyleBackColor = true;
             this.CloseButton.Click += new System.EventHandler(this.CloseButton_Click);
             // 
+            // TrayIcon
+            // 
+            this.TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("TrayIcon.Icon")));
+            this.TrayIcon.Text = "Bedrock Cosmos";
+            this.TrayIcon.Click += new System.EventHandler(this.TrayIcon_Click);
+            // 
+            // BackgroundModeTimer
+            // 
+            this.BackgroundModeTimer.Interval = 2500;
+            this.BackgroundModeTimer.Tick += new System.EventHandler(this.BackgroundModeTimer_Tick);
+            // 
+            // AboutButton
+            // 
+            this.AboutButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.AboutButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AboutButton.BackgroundImage")));
+            this.AboutButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AboutButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AboutButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.AboutButton.FlatAppearance.BorderSize = 0;
+            this.AboutButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.AboutButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.AboutButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AboutButton.Location = new System.Drawing.Point(15, 391);
+            this.AboutButton.Name = "AboutButton";
+            this.AboutButton.Size = new System.Drawing.Size(25, 25);
+            this.AboutButton.TabIndex = 17;
+            this.AboutButton.UseVisualStyleBackColor = true;
+            this.AboutButton.Click += new System.EventHandler(this.AboutButton_Click);
+            // 
+            // AboutPage
+            // 
+            this.AboutPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.AboutPage.Controls.Add(this.GitHubLabel);
+            this.AboutPage.Controls.Add(this.DiscordLabel);
+            this.AboutPage.Controls.Add(this.DiscordIcon);
+            this.AboutPage.Controls.Add(this.GitHubIcon);
+            this.AboutPage.Controls.Add(this.AboutLabel);
+            this.AboutPage.Controls.Add(this.AboutBackButton);
+            this.AboutPage.Location = new System.Drawing.Point(4, 22);
+            this.AboutPage.Name = "AboutPage";
+            this.AboutPage.Size = new System.Drawing.Size(806, 440);
+            this.AboutPage.TabIndex = 3;
+            this.AboutPage.Text = "About";
+            // 
+            // AboutBackButton
+            // 
+            this.AboutBackButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.AboutBackButton.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("AboutBackButton.BackgroundImage")));
+            this.AboutBackButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.AboutBackButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.AboutBackButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.AboutBackButton.FlatAppearance.BorderSize = 0;
+            this.AboutBackButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.AboutBackButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(15)))), ((int)(((byte)(15)))), ((int)(((byte)(15)))));
+            this.AboutBackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AboutBackButton.Location = new System.Drawing.Point(15, 391);
+            this.AboutBackButton.Name = "AboutBackButton";
+            this.AboutBackButton.Size = new System.Drawing.Size(25, 25);
+            this.AboutBackButton.TabIndex = 5;
+            this.AboutBackButton.UseVisualStyleBackColor = true;
+            this.AboutBackButton.Click += new System.EventHandler(this.ReturnToHomeScreen);
+            // 
+            // AboutLabel
+            // 
+            this.AboutLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.AboutLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.AboutLabel.Location = new System.Drawing.Point(120, 86);
+            this.AboutLabel.Name = "AboutLabel";
+            this.AboutLabel.Size = new System.Drawing.Size(560, 140);
+            this.AboutLabel.TabIndex = 6;
+            this.AboutLabel.Text = resources.GetString("AboutLabel.Text");
+            this.AboutLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // GitHubIcon
+            // 
+            this.GitHubIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("GitHubIcon.BackgroundImage")));
+            this.GitHubIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.GitHubIcon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.GitHubIcon.Location = new System.Drawing.Point(500, 293);
+            this.GitHubIcon.Name = "GitHubIcon";
+            this.GitHubIcon.Size = new System.Drawing.Size(32, 32);
+            this.GitHubIcon.TabIndex = 4;
+            this.GitHubIcon.TabStop = false;
+            // 
+            // DiscordIcon
+            // 
+            this.DiscordIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("DiscordIcon.BackgroundImage")));
+            this.DiscordIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.DiscordIcon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DiscordIcon.Location = new System.Drawing.Point(195, 293);
+            this.DiscordIcon.Name = "DiscordIcon";
+            this.DiscordIcon.Size = new System.Drawing.Size(32, 32);
+            this.DiscordIcon.TabIndex = 9;
+            this.DiscordIcon.TabStop = false;
+            this.DiscordIcon.Click += new System.EventHandler(this.OpenDiscordLink);
+            // 
+            // DiscordLabel
+            // 
+            this.DiscordLabel.ActiveLinkColor = System.Drawing.Color.Cyan;
+            this.DiscordLabel.AutoSize = true;
+            this.DiscordLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.DiscordLabel.LinkColor = System.Drawing.Color.LightSkyBlue;
+            this.DiscordLabel.Location = new System.Drawing.Point(235, 298);
+            this.DiscordLabel.Name = "DiscordLabel";
+            this.DiscordLabel.Size = new System.Drawing.Size(63, 21);
+            this.DiscordLabel.TabIndex = 11;
+            this.DiscordLabel.TabStop = true;
+            this.DiscordLabel.Text = "Discord";
+            this.DiscordLabel.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.DiscordLabel.Click += new System.EventHandler(this.OpenDiscordLink);
+            // 
+            // GitHubLabel
+            // 
+            this.GitHubLabel.ActiveLinkColor = System.Drawing.Color.Cyan;
+            this.GitHubLabel.AutoSize = true;
+            this.GitHubLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.GitHubLabel.LinkColor = System.Drawing.Color.LightSkyBlue;
+            this.GitHubLabel.Location = new System.Drawing.Point(540, 298);
+            this.GitHubLabel.Name = "GitHubLabel";
+            this.GitHubLabel.Size = new System.Drawing.Size(59, 21);
+            this.GitHubLabel.TabIndex = 12;
+            this.GitHubLabel.TabStop = true;
+            this.GitHubLabel.Text = "GitHub";
+            this.GitHubLabel.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.GitHubLabel.Click += new System.EventHandler(this.OpenGitHubLink);
+            // 
             // LaunchButton
             // 
             this.LaunchButton.BackColor = System.Drawing.Color.Transparent;
@@ -276,6 +489,20 @@
             this.LaunchButton.TabIndex = 6;
             this.LaunchButton.Text = "LAUNCH";
             this.LaunchButton.Click += new System.EventHandler(this.LaunchButton_Click);
+            // 
+            // BackgroundModeSwitch
+            // 
+            this.BackgroundModeSwitch.AutoSize = true;
+            this.BackgroundModeSwitch.BaseColor = System.Drawing.Color.White;
+            this.BackgroundModeSwitch.BaseOffColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.BackgroundModeSwitch.BaseOnColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.BackgroundModeSwitch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.BackgroundModeSwitch.Location = new System.Drawing.Point(19, 58);
+            this.BackgroundModeSwitch.Name = "BackgroundModeSwitch";
+            this.BackgroundModeSwitch.Size = new System.Drawing.Size(40, 20);
+            this.BackgroundModeSwitch.TabIndex = 12;
+            this.BackgroundModeSwitch.UseVisualStyleBackColor = true;
+            this.BackgroundModeSwitch.CheckedChanged += new System.EventHandler(this.BackgroundModeToggle_CheckedChanged);
             // 
             // DisableDevMenuButton
             // 
@@ -340,7 +567,6 @@
             this.EnableLoggingSwitch.Name = "EnableLoggingSwitch";
             this.EnableLoggingSwitch.Size = new System.Drawing.Size(40, 20);
             this.EnableLoggingSwitch.TabIndex = 10;
-            this.EnableLoggingSwitch.Text = "switch1";
             this.EnableLoggingSwitch.UseVisualStyleBackColor = true;
             this.EnableLoggingSwitch.CheckedChanged += new System.EventHandler(this.EnableLoggingSwitch_CheckedChanged);
             // 
@@ -411,11 +637,17 @@
             this.TabControl.ResumeLayout(false);
             this.HomePage.ResumeLayout(false);
             this.HomePage.PerformLayout();
+            this.SettingsPage.ResumeLayout(false);
+            this.SettingsPage.PerformLayout();
             this.DevPage.ResumeLayout(false);
             this.DevPage.PerformLayout();
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppIcon)).EndInit();
+            this.AboutPage.ResumeLayout(false);
+            this.AboutPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.GitHubIcon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DiscordIcon)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -441,6 +673,21 @@
         private System.Windows.Forms.RichTextBox DevConsole;
         private App.UI.RoundButton DisableDevMenuButton;
         private System.Windows.Forms.Button DevBackButton;
+        private System.Windows.Forms.Label BackgroundModeDescriptionLabel;
+        private System.Windows.Forms.Label BackgroundModeTitleLabel;
+        private App.UI.Switch BackgroundModeSwitch;
+        private System.Windows.Forms.Button SettingsBackButton;
+        private System.Windows.Forms.Button SettingsButton;
+        private System.Windows.Forms.NotifyIcon TrayIcon;
+        private System.Windows.Forms.Timer BackgroundModeTimer;
+        private System.Windows.Forms.Button AboutButton;
+        private System.Windows.Forms.TabPage AboutPage;
+        private System.Windows.Forms.Button AboutBackButton;
+        private System.Windows.Forms.Label AboutLabel;
+        private System.Windows.Forms.PictureBox DiscordIcon;
+        private System.Windows.Forms.PictureBox GitHubIcon;
+        private System.Windows.Forms.LinkLabel DiscordLabel;
+        private System.Windows.Forms.LinkLabel GitHubLabel;
     }
 }
 
