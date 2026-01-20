@@ -8,6 +8,10 @@
     "response": "ProcessedInPlayfabSearchResponsesJson"
   },
   {
+    "url": "https://messaging.mktpl.minecraft-services.net/api/v1.0/session/start",
+    "response": "ProcessedInApp"
+  },
+  {
     "url": "https://store.mktpl.minecraft-services.net/api/v1.0/layout/pages/DressingRoom_Capes",
     "response": "MainPages\\Capes.json"
   },

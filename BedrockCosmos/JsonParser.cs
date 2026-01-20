@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace BedrockCosmos
 {
-    public class JsonParser
+    internal class JsonParser
     {
-        public string ReadJsonFileContent(string filePath)
+        internal static string ReadJsonFileContent(string filePath)
         {
             if (File.Exists(filePath))
             {
@@ -20,7 +20,7 @@ namespace BedrockCosmos
             }
         }
 
-        public string AppendJsonToStart(string originalJsonContent, string jsonToAppendPath, string appendLocation)
+        internal static string AppendJsonToStart(string originalJsonContent, string jsonToAppendPath, string appendLocation)
         {
             if (File.Exists(jsonToAppendPath))
             {
@@ -48,7 +48,7 @@ namespace BedrockCosmos
             }
         }
 
-        public string AppendJsonToEnd(string originalJsonContent, string jsonToAppendPath, string appendLocation)
+        internal static string AppendJsonToEnd(string originalJsonContent, string jsonToAppendPath, string appendLocation)
         {
             if (File.Exists(jsonToAppendPath))
             {
@@ -76,7 +76,7 @@ namespace BedrockCosmos
             }
         }
 
-        public string AppendJsonToSpecificLocation(string originalJsonContent, string jsonToAppendPath, string appendLocation, int position)
+        internal static string AppendJsonToSpecificLocation(string originalJsonContent, string jsonToAppendPath, string appendLocation, int position)
         {
             if (File.Exists(jsonToAppendPath))
             {
@@ -104,7 +104,7 @@ namespace BedrockCosmos
             }
         }
 
-        public string ExtractPlayfabSearchId(string originalPlayfabData)
+        internal static string ExtractPlayfabSearchId(string originalPlayfabData)
         {
             // UUID Pattern
             string pattern = @"\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b";

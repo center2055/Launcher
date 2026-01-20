@@ -1,7 +1,5 @@
 ﻿using BedrockCosmos;
 using BedrockCosmos.App;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Titanium.Web.Proxy.EventArguments;
 using Titanium.Web.Proxy.Exceptions;
 using Titanium.Web.Proxy.Helpers;
@@ -35,7 +33,6 @@ namespace Titanium.Web.Proxy.Examples.Basic
 
         string currentPathForResponse = AppDomain.CurrentDomain.BaseDirectory + @"Responses-main\";
         string consoleSender = "Proxy";
-        JsonParser parser = new JsonParser();
 
         public ProxyController()
         {
@@ -318,7 +315,7 @@ namespace Titanium.Web.Proxy.Examples.Basic
                             localPath = currentPathForResponse + mItem.response;
                             //CosmosConsole.WriteLine(consoleSender, "Local path is now " + localPath);
 
-                            string jsonContent = parser.ReadJsonFileContent(localPath);
+                            string jsonContent = JsonParser.ReadJsonFileContent(localPath);
                             e.SetResponseBodyString(jsonContent);
                             CosmosConsole.WriteLine(consoleSender, $"Replaced response for {e.HttpClient.Request.Url}");
                         }
@@ -327,14 +324,14 @@ namespace Titanium.Web.Proxy.Examples.Basic
                     {
                         // Search for UUID if a PlayFab Search Item endpoint and use as response
                         PlayfabGetSearchedItemBody getSearchBody = JsonConvert.DeserializeObject<PlayfabGetSearchedItemBody>(requestBody);
-                        string searchUuid = parser.ExtractPlayfabSearchId(getSearchBody.filter);
+                        string searchUuid = JsonParser.ExtractPlayfabSearchId(getSearchBody.filter);
                         MarketItem mItem = JsonData.PackSearchIds.FirstOrDefault(o => o.uuid == searchUuid);
                         if (mItem != null)
                         {
                             localPath = currentPathForResponse + mItem.response;
                             //CosmosConsole.WriteLine(consoleSender, "Local path is now " + localPath);
 
-                            string jsonContent = parser.ReadJsonFileContent(localPath);
+                            string jsonContent = JsonParser.ReadJsonFileContent(localPath);
                             e.SetResponseBodyString(jsonContent);
                             CosmosConsole.WriteLine(consoleSender, $"Replaced response for {e.HttpClient.Request.Url}");
                         }
@@ -344,13 +341,30 @@ namespace Titanium.Web.Proxy.Examples.Basic
                         // Append custom marketplace button to response if accessing the main page
                         string responseBody = await e.GetResponseBodyAsString();
                         string location = "result.rows"; // Works the same as ["result"]["rows"]
-                        string appendedJson = parser.AppendJsonToStart(responseBody, localPath, location);
+                        string appendedJson = JsonParser.AppendJsonToStart(responseBody, localPath, location);
                         e.SetResponseBodyString(appendedJson);
                         CosmosConsole.WriteLine(consoleSender, $"Appended response for {e.HttpClient.Request.Url}");
                     }
+                    /*else if (currentUri == "https://messaging.mktpl.minecraft-services.net/api/v1.0/session/start")
+                    {
+                        string responseBody = await e.GetResponseBodyAsString();
+                        string location = "result.messages";
+                        string announcementPath = currentPathForResponse + @"News\LoginAnnouncement_append.json";
+                        string newsPath = currentPathForResponse + @"News\FirstNews_append.json";
+
+                        // Append front announcement
+                        string appendedJson = JsonParser.AppendJsonToEnd(responseBody, announcementPath, location);
+
+                        // Append news
+                        location = "result.inboxSummary.categories";
+                        appendedJson = JsonParser.AppendJsonToStart(appendedJson, newsPath, location);
+
+                        e.SetResponseBodyString(appendedJson);
+                        CosmosConsole.WriteLine(consoleSender, $"Appended response for {e.HttpClient.Request.Url}");
+                    }*/
                     else
                     {
-                        string jsonContent = parser.ReadJsonFileContent(localPath);
+                        string jsonContent = JsonParser.ReadJsonFileContent(localPath);
                         e.SetResponseBodyString(jsonContent);
                         CosmosConsole.WriteLine(consoleSender, $"Replaced response for {e.HttpClient.Request.Url}");
                     }

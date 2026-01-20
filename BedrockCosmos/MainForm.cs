@@ -2,10 +2,12 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Titanium.Web.Proxy;
 using Titanium.Web.Proxy.Examples.Basic;
 using Titanium.Web.Proxy.Examples.Basic.Helpers;
@@ -15,7 +17,7 @@ namespace BedrockCosmos
 {
     public partial class MainForm : Form
     {
-        private static readonly ProxyController controller = new ProxyController();
+        private static ProxyController controller = new ProxyController();
         private readonly AsyncFileDownload asyncDownload;
         string consoleSender = "App";
 
@@ -31,6 +33,9 @@ namespace BedrockCosmos
 
             // Will also log messages to the main console if uncommented.
             //CosmosConsole.LogToMainConsole = true;
+
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            VersionLabel.Text = "v" + version.Major + "." + version.Minor + "." + version.Build;
 
             SettingsManager.LoadSettings();
             ApplySettings();
@@ -68,12 +73,22 @@ namespace BedrockCosmos
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            if (SettingsManager.ProxyStarted)
-                controller.Stop();
+            if (controller != null)
+            {
+                try
+                {
+                    controller.Stop();
+                    controller.Dispose();
+                    controller = null;
+                }
+                catch
+                {
 
+                }
+            }
+                
             asyncDownload.Dispose();
-            this.Close();
-            Application.Exit();
+            Close();
         }
 
         private void TrayIcon_Click(object sender, EventArgs e)
@@ -276,6 +291,13 @@ namespace BedrockCosmos
                 CosmosConsole.WriteLine(consoleSender, "Logging disabled.");
                 SettingsManager.EnableLogging = false;
             }
+        }
+
+        private void ResetNewsButton_Click(object sender, EventArgs e)
+        {
+            //NewsManager.RetrieveNewsHistory();
+            //NewsManager.RetrieveCurrentNews();
+            //NewsManager.CheckForNews();
         }
 
         private void ClearLogsButton_Click(object sender, EventArgs e)
