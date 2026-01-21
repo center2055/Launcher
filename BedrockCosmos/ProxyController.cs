@@ -345,23 +345,26 @@ namespace Titanium.Web.Proxy.Examples.Basic
                         e.SetResponseBodyString(appendedJson);
                         CosmosConsole.WriteLine(consoleSender, $"Appended response for {e.HttpClient.Request.Url}");
                     }
-                    /*else if (currentUri == "https://messaging.mktpl.minecraft-services.net/api/v1.0/session/start")
+                    else if (currentUri == "https://messaging.mktpl.minecraft-services.net/api/v1.0/session/start")
                     {
                         string responseBody = await e.GetResponseBodyAsString();
-                        string location = "result.messages";
-                        string announcementPath = currentPathForResponse + @"News\LoginAnnouncement_append.json";
-                        string newsPath = currentPathForResponse + @"News\FirstNews_append.json";
+                        // string location = "result.messages";
+                        // string announcementPath = currentPathForResponse + @"News\LoginAnnouncement_append.json";
+                        // string newsPath = currentPathForResponse + @"News\CurrentNews_append.json";
+
+                        NewsManager.RetrieveNewsHistory();
+                        string newsTabDataPath = AppDomain.CurrentDomain.BaseDirectory + @"news.json";
 
                         // Append front announcement
-                        string appendedJson = JsonParser.AppendJsonToEnd(responseBody, announcementPath, location);
+                        //string appendedJson = JsonParser.AppendJsonToEnd(responseBody, announcementPath, location);
 
                         // Append news
-                        location = "result.inboxSummary.categories";
-                        appendedJson = JsonParser.AppendJsonToStart(appendedJson, newsPath, location);
+                        string location = "result.inboxSummary.categories";
+                        string appendedJson = JsonParser.AppendJsonToStart(responseBody, newsTabDataPath, location);
 
                         e.SetResponseBodyString(appendedJson);
                         CosmosConsole.WriteLine(consoleSender, $"Appended response for {e.HttpClient.Request.Url}");
-                    }*/
+                    }
                     else
                     {
                         string jsonContent = JsonParser.ReadJsonFileContent(localPath);

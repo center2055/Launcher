@@ -4,9 +4,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BedrockCosmos
 {
@@ -71,11 +68,11 @@ namespace BedrockCosmos
             if (!File.Exists(newsHistoryPath))
                 CreateNewsHistoryFile();
 
-            _newsHistory = File.ReadAllText(newsHistoryPath);
+            /*_newsHistory = File.ReadAllText(newsHistoryPath);
 
             JObject newsHistoryObj = JObject.Parse(_newsHistory);
             _cosmosUnreadNewsCount = (int)newsHistoryObj["totalNumberOfUnreadMessages"];
-            _cosmosNewsCount = (int)newsHistoryObj["totalNumberOfMessages"];
+            _cosmosNewsCount = (int)newsHistoryObj["totalNumberOfMessages"];*/
         }
 
         internal static void RetrieveCurrentNews()

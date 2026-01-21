@@ -73,7 +73,12 @@ namespace BedrockCosmos
 
         private void CloseButton_Click(object sender, EventArgs e)
         {
-            if (controller != null)
+            Close();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            /*if (controller != null)
             {
                 try
                 {
@@ -85,10 +90,9 @@ namespace BedrockCosmos
                 {
 
                 }
-            }
-                
+            }*/
+
             asyncDownload.Dispose();
-            Close();
         }
 
         private void TrayIcon_Click(object sender, EventArgs e)
