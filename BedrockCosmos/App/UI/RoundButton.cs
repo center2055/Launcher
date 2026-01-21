@@ -402,5 +402,11 @@ namespace BedrockCosmos.App.UI
             Invalidate();
             base.OnMouseUp(e);
         }
+
+        protected override void OnTextChanged(EventArgs e)
+        {
+            base.OnTextChanged(e);
+            Invalidate();
+        }
     }
 }
