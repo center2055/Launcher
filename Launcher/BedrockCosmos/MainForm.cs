@@ -17,9 +17,9 @@ namespace BedrockCosmos
 {
     public partial class MainForm : Form
     {
+        private LaunchManager launchManager = new LaunchManager();
         private static ProxyController controller = new ProxyController();
         private readonly AsyncFileDownload asyncDownload;
-        string consoleSender = "App";
 
         // For window movement
         bool drag = false;
@@ -30,12 +30,15 @@ namespace BedrockCosmos
             InitializeComponent();
             CosmosConsole.Initialize(DevConsole);
             asyncDownload = new AsyncFileDownload();
+            StatusLabel.Text = "";
 
             // Will also log messages to the main console if uncommented.
             //CosmosConsole.LogToMainConsole = true;
 
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            VersionLabel.Text = "v" + version.Major + "." + version.Minor + "." + version.Build;
+            launchManager.InitializeMgrAsyncFileDownload(asyncDownload);
+            launchManager.InitializeMgrLaunchButton(LaunchButton);
+            launchManager.InitializeMgrVersionLabel(VersionLabel);
+            launchManager.SetCurrentVersions();
 
             SettingsManager.LoadSettings();
             ApplySettings();
@@ -54,7 +57,7 @@ namespace BedrockCosmos
             {
                 SettingsManager.DevMenuClicks = 7;
                 AppIcon.Cursor = Cursors.Hand;
-                CosmosConsole.WriteLine(consoleSender, "Developer mode enabled.");
+                CosmosConsole.WriteLine("Developer mode enabled.");
             }
         }
 
@@ -78,7 +81,7 @@ namespace BedrockCosmos
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /*if (controller != null)
+            if (SettingsManager.ProxyStarted)
             {
                 try
                 {
@@ -90,7 +93,7 @@ namespace BedrockCosmos
                 {
 
                 }
-            }*/
+            }
 
             asyncDownload.Dispose();
         }
@@ -124,42 +127,61 @@ namespace BedrockCosmos
 
         private async void LaunchButton_Click(object sender, EventArgs e)
         {
-            if (LaunchButton.Text != "RUNNING")
+            if (!SettingsManager.ProxyStarted)
             {
-                CosmosConsole.WriteLine(consoleSender, "Starting proxy...");
-                SettingsManager.ProxyStarted = true;
+                LaunchButton.Enabled = false;
+                StatusLabel.Text = "";
 
+                CosmosConsole.WriteLine("Starting proxy...");
                 LaunchButton.Text = "Entering The Cosmos...";
-                LaunchButton.FilledBackColorBottom = Color.FromArgb(66, 0, 113);
-                LaunchButton.FilledBackColorTop = Color.FromArgb(138, 0, 234);
-                LaunchButton.HoverBackColor = Color.FromArgb(138, 0, 234);
-                LaunchButton.HoverFillColor = Color.FromArgb(138, 0, 234);
-                LaunchButton.NormalBackColor = Color.FromArgb(138, 0, 234);
-                LaunchButton.PressedBackColor = Color.FromArgb(138, 0, 234);
+                launchManager.UpdateLaunchButtonColor("purple");
+                await launchManager.InternetCheck();
 
-                await Task.Run(() =>
+                if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Misc\CurrentVersion.json"))
                 {
-                    controller.StartProxy();
-                });
+                    launchManager.SetLatestVersions();
+                    bool updateLauncher = launchManager.CheckLauncherUpdate();
 
-                LaunchButton.Text = "RUNNING";
-                CosmosConsole.WriteLine(consoleSender, "Proxy started!");
+                    if (updateLauncher && !SettingsManager.LauncherUpdatePrompted)
+                    {
+                        SettingsManager.LauncherUpdatePrompted = true;
+                        TabControl.SelectedTab = UpdatePage;
+                        launchManager.ResetLaunchStatus();
+                    }
+                    else
+                    {
+                        if (launchManager.CheckResponsesUpdate() && updateLauncher)
+                            launchManager.UpdateResponses();
+
+                        await Task.Run(() =>
+                        {
+                            controller.StartProxy();
+                        });
+
+                        LaunchButton.Text = "RUNNING";
+                        CosmosConsole.WriteLine("Proxy started!");
+
+                        SettingsManager.ProxyStarted = true;
+                        launchManager.OpenMinecraft();
+                    }
+                }
+                else
+                {
+                    launchManager.ResetLaunchStatus();
+                    StatusLabel.Text = "Error: Unable to connect to the Internet.\nBedrock Cosmos requires an active Internet connection to function.";
+                }
+
+                LaunchButton.Enabled = true;
             }
             else
             {
-                CosmosConsole.WriteLine(consoleSender, "Stopping proxy...");
+                CosmosConsole.WriteLine("Stopping proxy...");
                 SettingsManager.ProxyStarted = false;
 
-                LaunchButton.Text = "LAUNCH";
-                LaunchButton.FilledBackColorBottom = Color.FromArgb(0, 114, 47);
-                LaunchButton.FilledBackColorTop = Color.FromArgb(0, 188, 71);
-                LaunchButton.HoverBackColor = Color.FromArgb(0, 188, 71);
-                LaunchButton.HoverFillColor = Color.FromArgb(0, 188, 71);
-                LaunchButton.NormalBackColor = Color.FromArgb(0, 188, 71);
-                LaunchButton.PressedBackColor = Color.FromArgb(0, 188, 71);
+                launchManager.ResetLaunchStatus();
                 controller.Stop();
 
-                CosmosConsole.WriteLine(consoleSender, "Proxy stopped!");
+                CosmosConsole.WriteLine("Proxy stopped!");
             }
         }
 
@@ -209,16 +231,23 @@ namespace BedrockCosmos
             {
                 LaunchButton.Enabled = false;
                 LaunchButton.Text = "LISTENING";
+                StatusLabel.Text = "Proxy is disabled.\nOpen Minecraft to start the service.";
                 BackgroundModeTimer.Start();
-                CosmosConsole.WriteLine(consoleSender, "Background Mode enabled.");
+                CosmosConsole.WriteLine("Background Mode enabled.");
             }
             else
             {
                 LaunchButton.Enabled = true;
-                LaunchButton.Text = "LAUNCH";
+
+                if (SettingsManager.ProxyStarted)
+                    LaunchButton.Text = "RUNNING";
+                else
+                    LaunchButton.Text = "LAUNCH";
+
+                StatusLabel.Text = "";
                 BackgroundModeTimer.Stop();
-                CosmosConsole.WriteLine(consoleSender, "Background Mode disabled.");
-            } 
+                CosmosConsole.WriteLine("Background Mode disabled.");
+            }
         }
 
         private async void BackgroundModeTimer_Tick(object sender, EventArgs e)
@@ -229,38 +258,56 @@ namespace BedrockCosmos
             {
                 if (!SettingsManager.ProxyStarted)
                 {
-                    SettingsManager.ProxyStarted = true;
+                    await launchManager.InternetCheck();
 
-                    LaunchButton.FilledBackColorBottom = Color.FromArgb(66, 0, 113);
-                    LaunchButton.FilledBackColorTop = Color.FromArgb(138, 0, 234);
-                    LaunchButton.HoverBackColor = Color.FromArgb(138, 0, 234);
-                    LaunchButton.HoverFillColor = Color.FromArgb(138, 0, 234);
-                    LaunchButton.NormalBackColor = Color.FromArgb(138, 0, 234);
-                    LaunchButton.PressedBackColor = Color.FromArgb(138, 0, 234);
-
-                    await Task.Run(() =>
+                    if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"Misc\CurrentVersion.json"))
                     {
-                        controller.StartProxy();
-                    });
+                        launchManager.SetLatestVersions();
+                        bool updateLauncher = launchManager.CheckLauncherUpdate();
+
+                        if (updateLauncher && !SettingsManager.LauncherUpdatePrompted)
+                        {
+                            SettingsManager.LauncherUpdatePrompted = true;
+                            TabControl.SelectedTab = UpdatePage;
+                            Show();
+                            WindowState = FormWindowState.Normal;
+                            TrayIcon.Visible = false;
+                        }
+                        else
+                        {
+                            if (launchManager.CheckResponsesUpdate() && !updateLauncher)
+                                launchManager.UpdateResponses();
+
+                            await Task.Run(() =>
+                            {
+                                controller.StartProxy();
+                            });
+
+                            LaunchButton.Text = "LISTENING";
+                            CosmosConsole.WriteLine("Proxy started!");
+
+                            SettingsManager.ProxyStarted = true;
+                            launchManager.UpdateLaunchButtonColor("purple");
+                            StatusLabel.Text = "Proxy is enabled.\nClose Minecraft to stop the service.";
+                        }
+                    }
+                    else
+                    {
+                        StatusLabel.Text = "Error: Unable to connect to the Internet.\nBedrock Cosmos requires an active Internet connection to function.";
+                    }
                 }
-                //CosmosConsole.WriteLine(consoleSender, "Minecraft is open.");
+                //CosmosConsole.WriteLine("Minecraft is open.");
             }
             else
             {
                 if (SettingsManager.ProxyStarted)
                 {
                     SettingsManager.ProxyStarted = false;
-
-                    LaunchButton.FilledBackColorBottom = Color.FromArgb(0, 114, 47);
-                    LaunchButton.FilledBackColorTop = Color.FromArgb(0, 188, 71);
-                    LaunchButton.HoverBackColor = Color.FromArgb(0, 188, 71);
-                    LaunchButton.HoverFillColor = Color.FromArgb(0, 188, 71);
-                    LaunchButton.NormalBackColor = Color.FromArgb(0, 188, 71);
-                    LaunchButton.PressedBackColor = Color.FromArgb(0, 188, 71);
-
+                    launchManager.UpdateLaunchButtonColor("green");
+                    StatusLabel.Text = "Proxy is disabled.\nOpen Minecraft to start the service.";
                     controller.Stop();
                 }
-                //CosmosConsole.WriteLine(consoleSender, "Minecraft is closed.");
+                //CosmosConsole.WriteLine("Minecraft is closed.");
             }
         }
 
@@ -273,14 +320,23 @@ namespace BedrockCosmos
             DownloadZipButton.Enabled = false;
             DownloadZipProgressLabel.Visible = true;
 
-            DownloadZipProgressLabel.Text = "Downloading...";
-            await asyncDownload.DownloadFileAsync(fileUrl, downloadPath);
+            try
+            {
+                DownloadZipProgressLabel.Text = "Downloading...";
+                await asyncDownload.DownloadFileAsync(fileUrl, downloadPath);
 
-            DownloadZipProgressLabel.Text = "Extracting...";
-            await asyncDownload.ExtractFileAsync(downloadPath, extractPath, true);
+                DownloadZipProgressLabel.Text = "Extracting...";
+                await asyncDownload.ExtractFileAsync(downloadPath, extractPath, true);
 
-            DownloadZipButton.Enabled = true;
-            DownloadZipProgressLabel.Text = "Done!";
+                DownloadZipButton.Enabled = true;
+                DownloadZipProgressLabel.Text = "Done!";
+            }
+            catch (Exception)
+            {
+                DownloadZipButton.Enabled = true;
+                DownloadZipProgressLabel.Text = "Unable to download zip file.";
+                CosmosConsole.WriteLine("Unable to download file. Download canceled.");
+            }
         }
 
         private void EnableLoggingSwitch_CheckedChanged(object sender, EventArgs e)
@@ -288,11 +344,11 @@ namespace BedrockCosmos
             if (EnableLoggingSwitch.Checked)
             {
                 SettingsManager.EnableLogging = true;
-                CosmosConsole.WriteLine(consoleSender, "Logging enabled.");
+                CosmosConsole.WriteLine("Logging enabled.");
             }
             else
             {
-                CosmosConsole.WriteLine(consoleSender, "Logging disabled.");
+                CosmosConsole.WriteLine("Logging disabled.");
                 SettingsManager.EnableLogging = false;
             }
         }
@@ -317,6 +373,16 @@ namespace BedrockCosmos
         private void DisableDevMenuButton_Click(object sender, EventArgs e)
         {
             SettingsManager.DisableDevMenu();
+            TabControl.SelectedTab = HomePage;
+        }
+
+        private void UpdateButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CancelUpdateButton_Click(object sender, EventArgs e)
+        {
             TabControl.SelectedTab = HomePage;
         }
     }

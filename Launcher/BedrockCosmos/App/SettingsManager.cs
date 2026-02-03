@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
-using Newtonsoft.Json;
 
 namespace BedrockCosmos.App
 {
@@ -11,7 +12,7 @@ namespace BedrockCosmos.App
         private static int _devMenuClicks = 0;
         private static bool _devMenuEnabled = false;
         private static bool _enableLogging = false;
-        private static string consoleSender = "App";
+        private static bool _launcherUpdatePrompted = false;
 
         internal static bool ProxyStarted
         {
@@ -43,6 +44,12 @@ namespace BedrockCosmos.App
             set { _enableLogging = value; SaveSettings(); }
         }
 
+        internal static bool LauncherUpdatePrompted
+        {
+            get { return _launcherUpdatePrompted; }
+            set { _launcherUpdatePrompted = value; }
+        }
+
         internal static bool DevMenuCheck()
         {
             if (_devMenuClicks < 7)
@@ -53,7 +60,7 @@ namespace BedrockCosmos.App
             else
             {
                 if (!_devMenuEnabled)
-                    CosmosConsole.WriteLine(consoleSender, "Developer mode enabled.");
+                    CosmosConsole.WriteLine("Developer mode enabled.");
 
                 _devMenuEnabled = true;
                 return true;
@@ -64,7 +71,7 @@ namespace BedrockCosmos.App
         {
             _devMenuClicks = 0;
             _devMenuEnabled = false;
-            CosmosConsole.WriteLine(consoleSender, "Developer mode disabled.");
+            CosmosConsole.WriteLine("Developer mode disabled.");
         }
 
         internal static void SaveSettings()
@@ -83,7 +90,6 @@ namespace BedrockCosmos.App
             //CosmosConsole.WriteLine(consoleSender, "Saved settings to local file.");
         }
 
-        // Method to load settings from a JSON file and apply them
         internal static void LoadSettings()
         {
             string settingsFile = AppDomain.CurrentDomain.BaseDirectory + @"settings.json";
@@ -97,7 +103,7 @@ namespace BedrockCosmos.App
                 _devMenuEnabled = settings.DevMenuEnabled;
                 _enableLogging = settings.EnableLogging;
 
-                CosmosConsole.WriteLine(consoleSender, "Settings loaded from local file.");
+                CosmosConsole.WriteLine("Settings loaded from local file.");
             }
         }
     }

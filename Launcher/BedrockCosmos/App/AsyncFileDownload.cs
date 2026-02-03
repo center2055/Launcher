@@ -8,7 +8,6 @@ namespace BedrockCosmos.App
     internal class AsyncFileDownload
     {
         private readonly HttpClient httpClient;
-        private readonly string consoleSender = "App";
 
         internal AsyncFileDownload()
         {
@@ -17,7 +16,7 @@ namespace BedrockCosmos.App
 
         internal async Task DownloadFileAsync(string fileUrl, string downloadPath)
         {
-            CosmosConsole.WriteLine(consoleSender, $"Downloading file at {fileUrl}");
+            CosmosConsole.WriteLine($"Downloading file at {fileUrl}");
 
             using (var response = await httpClient.GetAsync(fileUrl, HttpCompletionOption.ResponseHeadersRead))
             {
@@ -34,7 +33,7 @@ namespace BedrockCosmos.App
                 }
             }
 
-            CosmosConsole.WriteLine(consoleSender, $"Successfully downloaded file to {downloadPath}");
+            CosmosConsole.WriteLine($"Successfully downloaded file to {downloadPath}");
         }
 
         internal async Task ExtractFileAsync(string zipFilePath, string extractPath, bool deleteAfterExtracting)
@@ -42,7 +41,7 @@ namespace BedrockCosmos.App
             if (!Directory.Exists(extractPath))
                 Directory.CreateDirectory(extractPath);
 
-            CosmosConsole.WriteLine(consoleSender, $"Extracting {Path.GetFileName(zipFilePath)}...");
+            CosmosConsole.WriteLine($"Extracting {Path.GetFileName(zipFilePath)}...");
 
             await Task.Run(() =>
             {
@@ -62,11 +61,11 @@ namespace BedrockCosmos.App
                 if (deleteAfterExtracting)
                 {
                     File.Delete(zipFilePath);
-                    CosmosConsole.WriteLine(consoleSender, $"Removed {Path.GetFileName(zipFilePath)} file.");
+                    CosmosConsole.WriteLine($"Removed {Path.GetFileName(zipFilePath)} file.");
                 }
             });
 
-            CosmosConsole.WriteLine(consoleSender, $"Successfully extracted {Path.GetFileName(zipFilePath)} to " +
+            CosmosConsole.WriteLine($"Successfully extracted {Path.GetFileName(zipFilePath)} to " +
                 $"{extractPath}");
         }
 

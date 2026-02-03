@@ -67,6 +67,10 @@
             this.EnableLoggingSwitch = new BedrockCosmos.App.UI.Switch();
             this.DownloadZipButton = new BedrockCosmos.App.UI.RoundButton();
             this.ExportLogsButton = new BedrockCosmos.App.UI.RoundButton();
+            this.UpdatePage = new System.Windows.Forms.TabPage();
+            this.UpdateButton = new BedrockCosmos.App.UI.RoundButton();
+            this.UpdateLabel = new System.Windows.Forms.Label();
+            this.CancelUpdateButton = new BedrockCosmos.App.UI.RoundButton();
             this.TabControl.SuspendLayout();
             this.HomePage.SuspendLayout();
             this.AboutPage.SuspendLayout();
@@ -76,25 +80,26 @@
             this.DevPage.SuspendLayout();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppIcon)).BeginInit();
+            this.UpdatePage.SuspendLayout();
             this.SuspendLayout();
             // 
             // StatusLabel
             // 
-            this.StatusLabel.AutoSize = true;
             this.StatusLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.StatusLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-            this.StatusLabel.Location = new System.Drawing.Point(368, 278);
+            this.StatusLabel.Location = new System.Drawing.Point(230, 278);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(64, 19);
+            this.StatusLabel.Size = new System.Drawing.Size(340, 68);
             this.StatusLabel.TabIndex = 2;
             this.StatusLabel.Text = "Waiting...";
-            this.StatusLabel.Visible = false;
+            this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // TabControl
             // 
             this.TabControl.Controls.Add(this.HomePage);
             this.TabControl.Controls.Add(this.AboutPage);
             this.TabControl.Controls.Add(this.SettingsPage);
+            this.TabControl.Controls.Add(this.UpdatePage);
             this.TabControl.Controls.Add(this.DevPage);
             this.TabControl.Location = new System.Drawing.Point(-5, -5);
             this.TabControl.Name = "TabControl";
@@ -380,12 +385,11 @@
             // 
             // DownloadZipProgressLabel
             // 
-            this.DownloadZipProgressLabel.AutoSize = true;
             this.DownloadZipProgressLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.DownloadZipProgressLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
-            this.DownloadZipProgressLabel.Location = new System.Drawing.Point(163, 52);
+            this.DownloadZipProgressLabel.Location = new System.Drawing.Point(162, 41);
             this.DownloadZipProgressLabel.Name = "DownloadZipProgressLabel";
-            this.DownloadZipProgressLabel.Size = new System.Drawing.Size(99, 19);
+            this.DownloadZipProgressLabel.Size = new System.Drawing.Size(121, 46);
             this.DownloadZipProgressLabel.TabIndex = 4;
             this.DownloadZipProgressLabel.Text = "Downloading...";
             this.DownloadZipProgressLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -664,6 +668,82 @@
             this.ExportLogsButton.Text = "Export Logs";
             this.ExportLogsButton.Click += new System.EventHandler(this.ExportLogsButton_Click);
             // 
+            // UpdatePage
+            // 
+            this.UpdatePage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.UpdatePage.Controls.Add(this.CancelUpdateButton);
+            this.UpdatePage.Controls.Add(this.UpdateLabel);
+            this.UpdatePage.Controls.Add(this.UpdateButton);
+            this.UpdatePage.Location = new System.Drawing.Point(4, 22);
+            this.UpdatePage.Name = "UpdatePage";
+            this.UpdatePage.Size = new System.Drawing.Size(806, 440);
+            this.UpdatePage.TabIndex = 4;
+            this.UpdatePage.Text = "Update";
+            // 
+            // UpdateButton
+            // 
+            this.UpdateButton.BackColor = System.Drawing.Color.Transparent;
+            this.UpdateButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.UpdateButton.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.UpdateButton.FilledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.UpdateButton.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.UpdateButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.UpdateButton.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.UpdateButton.HoverFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.UpdateButton.HoverForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.UpdateButton.InterpolationType = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            this.UpdateButton.Location = new System.Drawing.Point(245, 238);
+            this.UpdateButton.MinimumSize = new System.Drawing.Size(144, 47);
+            this.UpdateButton.Name = "UpdateButton";
+            this.UpdateButton.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.UpdateButton.PixelOffsetType = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            this.UpdateButton.PressedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.UpdateButton.PressedForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.UpdateButton.Radius = 5;
+            this.UpdateButton.Size = new System.Drawing.Size(144, 57);
+            this.UpdateButton.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            this.UpdateButton.TabIndex = 10;
+            this.UpdateButton.Text = "Update";
+            this.UpdateButton.Click += new System.EventHandler(this.UpdateButton_Click);
+            // 
+            // UpdateLabel
+            // 
+            this.UpdateLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.UpdateLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.UpdateLabel.Location = new System.Drawing.Point(180, 124);
+            this.UpdateLabel.Name = "UpdateLabel";
+            this.UpdateLabel.Size = new System.Drawing.Size(440, 75);
+            this.UpdateLabel.TabIndex = 11;
+            this.UpdateLabel.Text = "A new update is available for the Bedrock Cosmos Launcher!\r\n\r\nSelect \"Update\" to " +
+    "begin the installation.\r\n\r\n\r\n\r\n";
+            this.UpdateLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // CancelUpdateButton
+            // 
+            this.CancelUpdateButton.BackColor = System.Drawing.Color.Transparent;
+            this.CancelUpdateButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.CancelUpdateButton.DialogResult = System.Windows.Forms.DialogResult.None;
+            this.CancelUpdateButton.FilledBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.CancelUpdateButton.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.CancelUpdateButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.CancelUpdateButton.HoverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.CancelUpdateButton.HoverFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.CancelUpdateButton.HoverForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.CancelUpdateButton.InterpolationType = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            this.CancelUpdateButton.Location = new System.Drawing.Point(412, 238);
+            this.CancelUpdateButton.MinimumSize = new System.Drawing.Size(144, 47);
+            this.CancelUpdateButton.Name = "CancelUpdateButton";
+            this.CancelUpdateButton.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.CancelUpdateButton.PixelOffsetType = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            this.CancelUpdateButton.PressedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
+            this.CancelUpdateButton.PressedForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
+            this.CancelUpdateButton.Radius = 5;
+            this.CancelUpdateButton.Size = new System.Drawing.Size(144, 57);
+            this.CancelUpdateButton.SmoothingType = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            this.CancelUpdateButton.TabIndex = 12;
+            this.CancelUpdateButton.Text = "Cancel";
+            this.CancelUpdateButton.Click += new System.EventHandler(this.CancelUpdateButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -679,7 +759,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.TabControl.ResumeLayout(false);
             this.HomePage.ResumeLayout(false);
-            this.HomePage.PerformLayout();
             this.AboutPage.ResumeLayout(false);
             this.AboutPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiscordIcon)).EndInit();
@@ -691,6 +770,7 @@
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppIcon)).EndInit();
+            this.UpdatePage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -733,6 +813,10 @@
         private System.Windows.Forms.LinkLabel GitHubLabel;
         private App.UI.RoundButton ResetNewsButton;
         private System.Windows.Forms.Label VersionLabel;
+        private System.Windows.Forms.TabPage UpdatePage;
+        private App.UI.RoundButton UpdateButton;
+        private App.UI.RoundButton CancelUpdateButton;
+        private System.Windows.Forms.Label UpdateLabel;
     }
 }
 

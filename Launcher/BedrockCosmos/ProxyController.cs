@@ -353,7 +353,7 @@ namespace Titanium.Web.Proxy.Examples.Basic
                         // string newsPath = currentPathForResponse + @"News\CurrentNews_append.json";
 
                         NewsManager.RetrieveNewsHistory();
-                        string newsTabDataPath = AppDomain.CurrentDomain.BaseDirectory + @"news.json";
+                        string newsTabDataPath = AppDomain.CurrentDomain.BaseDirectory + @"News\news.json";
 
                         // Append front announcement
                         //string appendedJson = JsonParser.AppendJsonToEnd(responseBody, announcementPath, location);

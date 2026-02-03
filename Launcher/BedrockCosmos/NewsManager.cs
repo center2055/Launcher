@@ -14,10 +14,11 @@ namespace BedrockCosmos
         private static string _currentNewsUuid = "00000000-0000-4000-0000-000000000000";
         private static int _cosmosUnreadNewsCount = 0;
         private static int _cosmosNewsCount = 0;
-        
-        private static string newsHistoryPath = AppDomain.CurrentDomain.BaseDirectory + @"news.json";
-        private static string receivedNewsPath = AppDomain.CurrentDomain.BaseDirectory + @"receivedNews.json";
-        private static string currentResponsePath = AppDomain.CurrentDomain.BaseDirectory + @"Responses-main\";
+
+        private static string _newsDirectory = AppDomain.CurrentDomain.BaseDirectory + @"News";
+        private static string _newsHistoryPath = _newsDirectory + @"\News.json";
+        private static string _receivedNewsPath = _newsDirectory + @"\ReceivedNews.json";
+        private static string _currentResponsePath = AppDomain.CurrentDomain.BaseDirectory + @"Responses-main\";
 
         internal static string NewsHistory
         {
@@ -60,12 +61,15 @@ namespace BedrockCosmos
   }
 }";
 
-            File.WriteAllText(newsHistoryPath, newHistoryFile);
+            File.WriteAllText(_newsHistoryPath, newHistoryFile);
         }
 
         internal static void RetrieveNewsHistory()
         {
-            if (!File.Exists(newsHistoryPath))
+            if (!Directory.Exists(_newsDirectory))
+                Directory.CreateDirectory(_newsDirectory);
+
+            if (!File.Exists(_newsHistoryPath))
                 CreateNewsHistoryFile();
 
             /*_newsHistory = File.ReadAllText(newsHistoryPath);
@@ -77,7 +81,7 @@ namespace BedrockCosmos
 
         internal static void RetrieveCurrentNews()
         {
-            string currentNewsPath = currentResponsePath + @"News\CurrentNews_append.json";
+            string currentNewsPath = _currentResponsePath + @"News\CurrentNews_append.json";
 
             if (File.Exists(currentNewsPath))
             {
@@ -90,12 +94,12 @@ namespace BedrockCosmos
 
         internal static void CheckForNews()
         {
-            if (!File.Exists(receivedNewsPath))
-                File.WriteAllText(receivedNewsPath, "[]");
+            if (!File.Exists(_receivedNewsPath))
+                File.WriteAllText(_receivedNewsPath, "[]");
 
             List<string> previousNewsUuids;
 
-            string json = File.ReadAllText(receivedNewsPath);
+            string json = File.ReadAllText(_receivedNewsPath);
 
             previousNewsUuids = string.IsNullOrWhiteSpace(json)
                 ? new List<string>()
@@ -111,13 +115,13 @@ namespace BedrockCosmos
                 );
 
                 // Move the line below to when request is ran
-                File.WriteAllText(receivedNewsPath, updatedJson);
+                File.WriteAllText(_receivedNewsPath, updatedJson);
 
-                CosmosConsole.WriteLine("App", "Found a news update. Queued for display.");
+                CosmosConsole.WriteLine("Found a news update. Queued for display.");
             }
             else
             {
-                CosmosConsole.WriteLine("App", "No updated news found.");
+                CosmosConsole.WriteLine("No updated news found.");
             }
         }
 

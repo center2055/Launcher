@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using BedrockCosmos.App;
+using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -7,6 +8,8 @@ namespace BedrockCosmos
 {
     internal class JsonParser
     {
+        private static string consoleSender = "Parser";
+
         internal static string ReadJsonFileContent(string filePath)
         {
             if (File.Exists(filePath))
@@ -15,37 +18,16 @@ namespace BedrockCosmos
             }
             else
             {
-                Console.WriteLine($"[!] File not found: {filePath}");
+                CosmosConsole.WriteLine(consoleSender, $"File not found: {filePath}");
                 return string.Empty;
             }
         }
 
         internal static string AppendJsonToStart(string originalJsonContent, string jsonToAppendPath, string appendLocation)
         {
-            if (File.Exists(jsonToAppendPath))
-            {
-                string jsonToAppendContent = File.ReadAllText(jsonToAppendPath);
-                JObject originalJson = JObject.Parse(originalJsonContent);
-                JObject jsonToAppend = JObject.Parse(jsonToAppendContent);
-                JArray targetArray = (JArray)originalJson.SelectToken(appendLocation);
-
-                if (targetArray != null)
-                {
-                    targetArray.Insert(0, jsonToAppend);  // Insert new content at the beginning
-                    string updatedJson = originalJson.ToString();
-                    return updatedJson;
-                }
-                else
-                {
-                    Console.WriteLine($"[!] Could not find array at path: {appendLocation} in {originalJsonContent}");
-                    return string.Empty;
-                }
-            }
-            else
-            {
-                Console.WriteLine($"[!] File not found: {jsonToAppendPath}");
-                return string.Empty;
-            }
+            // Appends to position 0, the start of the json
+            string appendedJson = AppendJsonToSpecificLocation(originalJsonContent, jsonToAppendPath, appendLocation, 0);
+            return appendedJson;
         }
 
         internal static string AppendJsonToEnd(string originalJsonContent, string jsonToAppendPath, string appendLocation)
@@ -65,13 +47,13 @@ namespace BedrockCosmos
                 }
                 else
                 {
-                    Console.WriteLine($"[!] Could not find array at path: {appendLocation} in {originalJsonContent}");
+                    CosmosConsole.WriteLine(consoleSender, $"Could not find array at path: {appendLocation} in {originalJsonContent}");
                     return string.Empty;
                 }
             }
             else
             {
-                Console.WriteLine($"[!] File not found: {jsonToAppendPath}");
+                CosmosConsole.WriteLine(consoleSender, "File not found: {jsonToAppendPath}");
                 return string.Empty;
             }
         }
@@ -93,13 +75,13 @@ namespace BedrockCosmos
                 }
                 else
                 {
-                    Console.WriteLine($"[!] Could not find array at path: {appendLocation} in {originalJsonContent}");
+                    CosmosConsole.WriteLine(consoleSender, $"Could not find array at path: {appendLocation} in {originalJsonContent}");
                     return string.Empty;
                 }
             }
             else
             {
-                Console.WriteLine($"[!] File not found: {jsonToAppendPath}");
+                CosmosConsole.WriteLine(consoleSender, $"File not found: {jsonToAppendPath}");
                 return string.Empty;
             }
         }

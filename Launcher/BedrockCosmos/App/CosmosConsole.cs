@@ -50,6 +50,12 @@ namespace BedrockCosmos.App
             return lastVisibleChar >= textBox.TextLength - 1;
         }
 
+        internal static void WriteLine(string message)
+        {
+            if (SettingsManager.EnableLogging)
+                WriteLine("App", message);
+        }
+
         internal static void WriteLine(string sender, string message)
         {
             if (SettingsManager.EnableLogging)
@@ -65,7 +71,7 @@ namespace BedrockCosmos.App
                     else
                     {
                         bool shouldAutoScroll = IsScrolledToBottom(_console);
-                        
+
                         POINT scrollPos = new POINT();
                         SendMessage(_console.Handle, EM_GETSCROLLPOS, IntPtr.Zero, ref scrollPos); // Save scroll position
                         SendMessage(_console.Handle, WM_SETREDRAW, IntPtr.Zero, IntPtr.Zero); // Suspend redraw
