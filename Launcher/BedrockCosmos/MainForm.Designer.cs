@@ -38,6 +38,8 @@
             this.SettingsButton = new System.Windows.Forms.Button();
             this.LaunchButton = new BedrockCosmos.App.UI.RoundGradientButton();
             this.AboutPage = new System.Windows.Forms.TabPage();
+            this.WebsiteLabel = new System.Windows.Forms.LinkLabel();
+            this.WebsiteIcon = new System.Windows.Forms.PictureBox();
             this.GitHubLabel = new System.Windows.Forms.LinkLabel();
             this.DiscordLabel = new System.Windows.Forms.LinkLabel();
             this.DiscordIcon = new System.Windows.Forms.PictureBox();
@@ -75,9 +77,11 @@
             this.CloseButton = new System.Windows.Forms.Button();
             this.TrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.BackgroundModeTimer = new System.Windows.Forms.Timer(this.components);
+            this.ChangelogLabel = new System.Windows.Forms.LinkLabel();
             this.TabControl.SuspendLayout();
             this.HomePage.SuspendLayout();
             this.AboutPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.WebsiteIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DiscordIcon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GitHubIcon)).BeginInit();
             this.SettingsPage.SuspendLayout();
@@ -204,6 +208,8 @@
             // AboutPage
             // 
             this.AboutPage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.AboutPage.Controls.Add(this.WebsiteLabel);
+            this.AboutPage.Controls.Add(this.WebsiteIcon);
             this.AboutPage.Controls.Add(this.GitHubLabel);
             this.AboutPage.Controls.Add(this.DiscordLabel);
             this.AboutPage.Controls.Add(this.DiscordIcon);
@@ -216,13 +222,40 @@
             this.AboutPage.TabIndex = 3;
             this.AboutPage.Text = "About";
             // 
+            // WebsiteLabel
+            // 
+            this.WebsiteLabel.ActiveLinkColor = System.Drawing.Color.Cyan;
+            this.WebsiteLabel.AutoSize = true;
+            this.WebsiteLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.WebsiteLabel.LinkColor = System.Drawing.Color.LightSkyBlue;
+            this.WebsiteLabel.Location = new System.Drawing.Point(540, 298);
+            this.WebsiteLabel.Name = "WebsiteLabel";
+            this.WebsiteLabel.Size = new System.Drawing.Size(65, 21);
+            this.WebsiteLabel.TabIndex = 14;
+            this.WebsiteLabel.TabStop = true;
+            this.WebsiteLabel.Text = "Website";
+            this.WebsiteLabel.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.WebsiteLabel.Click += new System.EventHandler(this.OpenWebsiteLink);
+            // 
+            // WebsiteIcon
+            // 
+            this.WebsiteIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("WebsiteIcon.BackgroundImage")));
+            this.WebsiteIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.WebsiteIcon.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.WebsiteIcon.Location = new System.Drawing.Point(500, 293);
+            this.WebsiteIcon.Name = "WebsiteIcon";
+            this.WebsiteIcon.Size = new System.Drawing.Size(32, 32);
+            this.WebsiteIcon.TabIndex = 13;
+            this.WebsiteIcon.TabStop = false;
+            this.WebsiteIcon.Click += new System.EventHandler(this.OpenWebsiteLink);
+            // 
             // GitHubLabel
             // 
             this.GitHubLabel.ActiveLinkColor = System.Drawing.Color.Cyan;
             this.GitHubLabel.AutoSize = true;
             this.GitHubLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.GitHubLabel.LinkColor = System.Drawing.Color.LightSkyBlue;
-            this.GitHubLabel.Location = new System.Drawing.Point(540, 298);
+            this.GitHubLabel.Location = new System.Drawing.Point(392, 298);
             this.GitHubLabel.Name = "GitHubLabel";
             this.GitHubLabel.Size = new System.Drawing.Size(59, 21);
             this.GitHubLabel.TabIndex = 12;
@@ -263,7 +296,7 @@
             this.GitHubIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("GitHubIcon.BackgroundImage")));
             this.GitHubIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.GitHubIcon.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.GitHubIcon.Location = new System.Drawing.Point(500, 293);
+            this.GitHubIcon.Location = new System.Drawing.Point(352, 293);
             this.GitHubIcon.Name = "GitHubIcon";
             this.GitHubIcon.Size = new System.Drawing.Size(32, 32);
             this.GitHubIcon.TabIndex = 4;
@@ -429,6 +462,7 @@
             // UpdatePage
             // 
             this.UpdatePage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this.UpdatePage.Controls.Add(this.ChangelogLabel);
             this.UpdatePage.Controls.Add(this.CancelUpdateButton);
             this.UpdatePage.Controls.Add(this.UpdateLabel);
             this.UpdatePage.Controls.Add(this.UpdateButton);
@@ -450,7 +484,7 @@
             this.CancelUpdateButton.HoverFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
             this.CancelUpdateButton.HoverForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
             this.CancelUpdateButton.InterpolationType = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            this.CancelUpdateButton.Location = new System.Drawing.Point(412, 238);
+            this.CancelUpdateButton.Location = new System.Drawing.Point(412, 283);
             this.CancelUpdateButton.MinimumSize = new System.Drawing.Size(144, 47);
             this.CancelUpdateButton.Name = "CancelUpdateButton";
             this.CancelUpdateButton.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
@@ -470,7 +504,7 @@
             this.UpdateLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
             this.UpdateLabel.Location = new System.Drawing.Point(180, 124);
             this.UpdateLabel.Name = "UpdateLabel";
-            this.UpdateLabel.Size = new System.Drawing.Size(440, 100);
+            this.UpdateLabel.Size = new System.Drawing.Size(440, 93);
             this.UpdateLabel.TabIndex = 11;
             this.UpdateLabel.Text = "A new update is available for the Bedrock Cosmos Launcher!\r\n\r\nSelect \"Update\" to " +
     "begin the installation.\r\n\r\n\r\n\r\n";
@@ -488,7 +522,7 @@
             this.UpdateButton.HoverFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
             this.UpdateButton.HoverForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(153)))), ((int)(((byte)(153)))));
             this.UpdateButton.InterpolationType = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            this.UpdateButton.Location = new System.Drawing.Point(245, 238);
+            this.UpdateButton.Location = new System.Drawing.Point(245, 283);
             this.UpdateButton.MinimumSize = new System.Drawing.Size(144, 47);
             this.UpdateButton.Name = "UpdateButton";
             this.UpdateButton.NormalBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(75)))), ((int)(((byte)(75)))));
@@ -834,6 +868,21 @@
             this.BackgroundModeTimer.Interval = 2500;
             this.BackgroundModeTimer.Tick += new System.EventHandler(this.BackgroundModeTimer_Tick);
             // 
+            // ChangelogLabel
+            // 
+            this.ChangelogLabel.ActiveLinkColor = System.Drawing.Color.Cyan;
+            this.ChangelogLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.ChangelogLabel.LinkColor = System.Drawing.Color.LightSkyBlue;
+            this.ChangelogLabel.Location = new System.Drawing.Point(334, 220);
+            this.ChangelogLabel.Name = "ChangelogLabel";
+            this.ChangelogLabel.Size = new System.Drawing.Size(133, 36);
+            this.ChangelogLabel.TabIndex = 13;
+            this.ChangelogLabel.TabStop = true;
+            this.ChangelogLabel.Text = "Changelog";
+            this.ChangelogLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.ChangelogLabel.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.ChangelogLabel.Click += new System.EventHandler(this.ChangelogLabel_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -851,6 +900,7 @@
             this.HomePage.ResumeLayout(false);
             this.AboutPage.ResumeLayout(false);
             this.AboutPage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.WebsiteIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DiscordIcon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GitHubIcon)).EndInit();
             this.SettingsPage.ResumeLayout(false);
@@ -911,6 +961,9 @@
         private System.Windows.Forms.Label LanguageDescriptionLabel;
         private System.Windows.Forms.Label LanguageTitleLabel;
         private App.UI.RoundButton FixProxyHangButton;
+        private System.Windows.Forms.LinkLabel WebsiteLabel;
+        private System.Windows.Forms.PictureBox WebsiteIcon;
+        private System.Windows.Forms.LinkLabel ChangelogLabel;
     }
 }
 

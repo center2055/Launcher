@@ -236,6 +236,11 @@ namespace BedrockCosmos
             Process.Start("https://github.com/Bedrock-Cosmos");
         }
 
+        private void OpenWebsiteLink(object sender, EventArgs e)
+        {
+            Process.Start("https://bedrock-cosmos.app/");
+        }
+
         private void BackgroundModeToggle_CheckedChanged(object sender, EventArgs e)
         {
             SettingsManager.BackgroundMode = BackgroundModeSwitch.Checked;
@@ -347,11 +352,13 @@ namespace BedrockCosmos
             AboutLabel.Text = LanguageHandler.About_AboutLabel_Text;
             DiscordLabel.Text = LanguageHandler.About_DiscordLabel_Text;
             GitHubLabel.Text = LanguageHandler.About_GitHubLabel_Text;
+            WebsiteLabel.Text = LanguageHandler.About_WebsiteLabel_Text;
             BackgroundModeTitleLabel.Text = LanguageHandler.Settings_BackgroundMode_Title;
             BackgroundModeDescriptionLabel.Text = LanguageHandler.Settings_BackgroundMode_Description;
             LanguageTitleLabel.Text = LanguageHandler.Settings_Language_Title;
             LanguageDescriptionLabel.Text = LanguageHandler.Settings_Language_Description;
             UpdateLabel.Text = LanguageHandler.Update_UpdateLabel_Text;
+            ChangelogLabel.Text = LanguageHandler.Update_ChangelogLabel_Text;
             UpdateButton.Text = LanguageHandler.Update_UpdateButton_Text;
             CancelUpdateButton.Text = LanguageHandler.Update_CancelUpdateButton_Text;
 
@@ -447,6 +454,11 @@ namespace BedrockCosmos
         {
             SettingsManager.DisableDevMenu();
             TabControl.SelectedTab = HomePage;
+        }
+
+        private void ChangelogLabel_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://bedrock-cosmos.app/changelogs/");
         }
 
         private void UpdateButton_Click(object sender, EventArgs e)

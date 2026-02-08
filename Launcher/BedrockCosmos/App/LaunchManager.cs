@@ -11,8 +11,8 @@ namespace BedrockCosmos.App
 {
     internal class LaunchManager
     {
-        private string _currentLauncherVersion = "1.0.0";
-        private string _latestLauncherVersion = "1.0.0";
+        private Version _currentLauncherVersion = new Version("1.0.0");
+        private Version _latestLauncherVersion = new Version("1.0.0");
         private int _currentResponsesVersion = 1;
         private int _latestResponsesVersion = 1;
         private string _miscDirectory = AppDomain.CurrentDomain.BaseDirectory + @"Misc";
@@ -20,13 +20,13 @@ namespace BedrockCosmos.App
         private RoundGradientButton _launchButton = null;
         private System.Windows.Forms.Label _versionLabel = null;
 
-        internal string CurrentLauncherVersion
+        internal Version CurrentLauncherVersion
         {
             get { return _currentLauncherVersion; }
             set { _currentLauncherVersion = value; }
         }
 
-        internal string LatestLauncherVersion
+        internal Version LatestLauncherVersion
         {
             get { return _latestLauncherVersion; }
             set { _latestLauncherVersion = value; }
@@ -63,7 +63,7 @@ namespace BedrockCosmos.App
         {
             // Launcher
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            _currentLauncherVersion = version.Major + "." + version.Minor + "." + version.Build;
+            _currentLauncherVersion = new Version(version.Major + "." + version.Minor + "." + version.Build);
 
             if (_versionLabel != null)
                 _versionLabel.Text = $"v{_currentLauncherVersion}";
@@ -111,17 +111,14 @@ namespace BedrockCosmos.App
             {
                 string json = File.ReadAllText(versionJsonPath);
                 ver = JsonConvert.DeserializeObject<AppVersions>(json);
-                _latestLauncherVersion = ver.launcherVersion;
+                _latestLauncherVersion = new Version(ver.launcherVersion);
                 _latestResponsesVersion = ver.responsesVersion;
             }
         }
 
         internal bool CheckLauncherUpdate()
         {
-            int strippedCurrentLauncherVer = Int32.Parse(_currentLauncherVersion.Replace(".", ""));
-            int strippedLatestLauncherVer = Int32.Parse(_latestLauncherVersion.Replace(".", ""));
-
-            if (strippedLatestLauncherVer > strippedCurrentLauncherVer)
+            if (_latestLauncherVersion > _currentLauncherVersion)
             {
                 CosmosConsole.WriteLine($"Launcher update found (v{_latestLauncherVersion}).");
                 return true;
