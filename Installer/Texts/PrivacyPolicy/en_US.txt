@@ -64,4 +64,4 @@ Bedrock Cosmos is fully open source and available on GitHub. You can review our 
 The open-source nature of the project ensures that any data collection would be immediately visible to the community, providing an additional layer of accountability and trust.
 
 11. Contact Us
-For questions about this Privacy policy, please contact us through our Discord server, via email at contact@bedrock-cosmos.app, or through our GitHub repository.
+For questions about this Privacy Policy, please contact us through our Discord server, via email at contact@bedrock-cosmos.app, or through our GitHub repository.
