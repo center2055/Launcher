@@ -158,6 +158,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="App\AsyncFileDownload.cs" />
+    <Compile Include="App\UriHandler.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

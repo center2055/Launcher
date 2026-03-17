@@ -131,7 +131,7 @@ namespace BedrockCosmos.App
         internal bool CheckResponsesUpdate()
         {
             if (_latestResponsesVersion > _currentResponsesVersion || 
-                !Directory.Exists(PathDefinitions.CosmosAppData + @"Responses-main"))
+                !Directory.Exists(PathDefinitions.ResponsesDirectory))
             {
                 CosmosConsole.WriteLine($"Responses update found (v{_latestResponsesVersion}).");
                 return true;

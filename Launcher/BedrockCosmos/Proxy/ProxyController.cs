@@ -216,7 +216,8 @@ namespace BedrockCosmos.Proxy
                 try
                 {
                     e.HttpClient.Response.StatusCode = 200; // Set to OK, otherwise stays at a not found error
-                    string localPath = PathDefinitions.ResponsesDirectory + urlData.response;
+                    string localPath = Path.Combine(PathDefinitions.ResponsesDirectory + urlData.response);
+                    localPath = Path.GetFullPath(localPath);
 
                     switch (currentUri)
                     {
@@ -309,7 +310,8 @@ namespace BedrockCosmos.Proxy
             if (mItem != null)
             {
                 userData.RequestLogs = userData.RequestLogs + $"└── Get Item: Found local Json for item {getItemBody.itemid}\n";
-                string localPath = PathDefinitions.ResponsesDirectory + mItem.response;
+                string localPath = Path.Combine(PathDefinitions.ResponsesDirectory + mItem.response);
+                localPath = Path.GetFullPath(localPath);
                 SetResponseBodyFromFile(localPath, e);
             }
             else
@@ -334,7 +336,8 @@ namespace BedrockCosmos.Proxy
             if (mItem != null)
             {
                 userData.RequestLogs = userData.RequestLogs + $"└── Search: Found local Json for item {searchUuid}\n";
-                string localPath = PathDefinitions.ResponsesDirectory + mItem.response;
+                string localPath = Path.Combine(PathDefinitions.ResponsesDirectory + mItem.response);
+                localPath = Path.GetFullPath(localPath);
                 SetResponseBodyFromFile(localPath, e);
             }
             else

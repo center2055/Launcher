@@ -64,11 +64,11 @@ namespace BedrockCosmos
         private void HandleUri(string uri)
         {
             // For bedrockcosmos:// URIs
-            string data = uri.Substring("bedrockcosmos://".Length);
-            if (data.EndsWith("/"))
-                data = data.Remove(data.Length - 1);
+            string handledUri = UriHandler.Handle(uri);
+            if (!SettingsManager.ProxyStarted && !SettingsManager.BackgroundMode)
+                LaunchButton.PerformClick();
 
-            StatusLabel.Text = data.ToString() + " was loaded (URI)!";
+            Process.Start("minecraft://" + handledUri);
         }
 
         private void HandleBcPackFile(string filePath)
