@@ -453,6 +453,14 @@ namespace BedrockCosmos
                 DownloadZipProgressLabel.Text = "Extracting...";
                 await asyncDownload.ExtractFileAsync(downloadPath, extractPath, true);
 
+                if (Directory.Exists(PathDefinitions.ResponsesDirectory))
+                {
+                    await Task.Run(() =>
+                    {
+                        Directory.Delete(PathDefinitions.ResponsesDirectory, true);
+                    });
+                } 
+
                 Directory.Move(PathDefinitions.CosmosAppData + "Responses-main", PathDefinitions.ResponsesDirectory);
                 DownloadZipButton.Enabled = true;
                 DownloadZipProgressLabel.Text = "Done!";

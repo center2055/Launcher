@@ -148,6 +148,14 @@ namespace BedrockCosmos.App
             {
                 await _asyncDownload.DownloadFileAsync(fileUrl, downloadPath);
                 await _asyncDownload.ExtractFileAsync(downloadPath, extractPath, true);
+                if (Directory.Exists(PathDefinitions.ResponsesDirectory))
+                {
+                    await Task.Run(() =>
+                    {
+                        Directory.Delete(PathDefinitions.ResponsesDirectory, true);
+                    });
+                }
+
                 Directory.Move(PathDefinitions.CosmosAppData + "Responses-" + latestResponsesVersionStr, PathDefinitions.ResponsesDirectory);
                 File.WriteAllText(PathDefinitions.MiscDirectory + @"ResponsesVersion.txt", latestResponsesVersionStr);
                 _currentResponsesVersion = _latestResponsesVersion;
