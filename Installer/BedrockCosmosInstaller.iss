@@ -1,0 +1,127 @@
+#define AppName "Bedrock Cosmos"
+#define AppExeName "BedrockCosmos.exe"
+#define AppVersion "1.0.1"
+#define BuildOutput "..\Launcher\BedrockCosmos\bin\Release"
+
+[Setup]
+AppId={{184CA1AA-0199-49FD-ACD9-A77B40E236E3}
+AppName={#AppName}
+AppVersion={#AppVersion}
+AppPublisher=Bedrock Cosmos
+DefaultDirName={autopf}\Bedrock Cosmos
+DefaultGroupName=Bedrock Cosmos
+DisableProgramGroupPage=yes
+OutputDir=Output
+OutputBaseFilename=BedrockCosmos-Setup
+Compression=lzma
+SolidCompression=yes
+WizardStyle=modern
+LicenseFile=Texts\TermsOfService\en_US.txt
+InfoBeforeFile=Texts\CertificateAgreement\en_US.txt
+UninstallDisplayIcon={app}\{#AppExeName}
+SetupIconFile=..\Launcher\BedrockCosmos\Icon.ico
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
+
+[Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
+
+[Files]
+Source: "{#BuildOutput}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Texts\CertificateAgreement\en_US.txt"; DestName: "Certificate_en_US.txt"; Flags: dontcopy
+Source: "Texts\CertificateAgreement\de_DE.txt"; DestName: "Certificate_de_DE.txt"; Flags: dontcopy
+Source: "Texts\TermsOfService\en_US.txt"; DestName: "Terms_en_US.txt"; Flags: dontcopy
+Source: "Texts\TermsOfService\de_DE.txt"; DestName: "Terms_de_DE.txt"; Flags: dontcopy
+
+[Icons]
+Name: "{autoprograms}\Bedrock Cosmos"; Filename: "{app}\{#AppExeName}"
+Name: "{autodesktop}\Bedrock Cosmos"; Filename: "{app}\{#AppExeName}"; Tasks: desktopicon
+
+[Registry]
+Root: HKCR; Subkey: "bedrockcosmos"; ValueType: string; ValueName: ""; ValueData: "URL:Bedrock Cosmos"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "bedrockcosmos"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""; Flags: uninsdeletekey
+Root: HKCR; Subkey: "bedrockcosmos\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\BCPackIcon.ico"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "bedrockcosmos\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; Flags: uninsdeletekey
+Root: HKCR; Subkey: ".bcpack"; ValueType: string; ValueName: ""; ValueData: "BedrockCosmos.BCPack"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Pack"; Flags: uninsdeletekey; Languages: english
+Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Paketdatei"; Flags: uninsdeletekey; Languages: german
+Root: HKCR; Subkey: "BedrockCosmos.BCPack\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\BCPackIcon.ico"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "BedrockCosmos.BCPack\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; Flags: uninsdeletekey
+Root: HKCR; Subkey: ".bcpersona"; ValueType: string; ValueName: ""; ValueData: "BedrockCosmos.BCPersona"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Persona"; Flags: uninsdeletekey; Languages: english
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Persona-Datei"; Flags: uninsdeletekey; Languages: german
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\BCPackIcon.ico"; Flags: uninsdeletekey
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; Flags: uninsdeletekey
+
+[Run]
+Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+function CurrentLanguageCode(): String;
+begin
+  if ActiveLanguage = 'german' then
+    Result := 'de_DE'
+  else
+    Result := 'en_US';
+end;
+
+function Localize(Key: String): String;
+begin
+  if ActiveLanguage = 'german' then
+  begin
+    if Key = 'CertificateTitle' then Result := 'Hinweis zum Proxy-Zertifikat'
+    else if Key = 'CertificateDescription' then Result := 'Bitte lies den folgenden Hinweis, bevor du fortfährst.'
+    else Result := Key;
+  end
+  else
+  begin
+    if Key = 'CertificateTitle' then Result := 'Proxy Certificate Notice'
+    else if Key = 'CertificateDescription' then Result := 'Please read the following notice before continuing.'
+    else Result := Key;
+  end;
+end;
+
+function ReadLocalizedText(Kind: String): String;
+var
+  TempFile: String;
+  Lines: TArrayOfString;
+  Index: Integer;
+begin
+  Result := '';
+  TempFile := Kind + '_' + CurrentLanguageCode() + '.txt';
+  ExtractTemporaryFile(TempFile);
+  if LoadStringsFromFile(ExpandConstant('{tmp}\') + TempFile, Lines) then
+  begin
+    for Index := 0 to GetArrayLength(Lines) - 1 do
+    begin
+      if Index > 0 then
+        Result := Result + #13#10;
+      Result := Result + Lines[Index];
+    end;
+  end;
+end;
+
+procedure LoadLocalizedWizardText(Viewer: TRichEditViewer; Kind: String);
+begin
+  Viewer.Text := ReadLocalizedText(Kind);
+end;
+
+procedure InitializeWizard();
+begin
+  { Use the built-in Inno Setup license page so acceptance is mandatory. }
+  LoadLocalizedWizardText(WizardForm.LicenseMemo, 'Terms');
+  LoadLocalizedWizardText(WizardForm.InfoBeforeMemo, 'Certificate');
+end;
+
+procedure CurPageChanged(CurPageID: Integer);
+begin
+  if CurPageID = wpInfoBefore then
+  begin
+    WizardForm.PageNameLabel.Caption := Localize('CertificateTitle');
+    WizardForm.PageDescriptionLabel.Caption := Localize('CertificateDescription');
+  end;
+end;
