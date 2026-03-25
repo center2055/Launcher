@@ -15,7 +15,7 @@ OutputDir=Output
 OutputBaseFilename=BedrockCosmos-Setup
 Compression=lzma
 SolidCompression=yes
-WizardStyle=modern
+WizardStyle=modern dynamic
 LicenseFile=Texts\TermsOfService\en_US.txt
 InfoBeforeFile=Texts\CertificateAgreement\en_US.txt
 UninstallDisplayIcon={app}\{#AppExeName}
@@ -26,6 +26,9 @@ ArchitecturesInstallIn64BitMode=x64compatible
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "german"; MessagesFile: "compiler:Languages\German.isl"
+Name: "indonesian"; MessagesFile: "Texts\Other\Indonesian.isl"
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
@@ -34,8 +37,14 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#BuildOutput}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "Texts\CertificateAgreement\en_US.txt"; DestName: "Certificate_en_US.txt"; Flags: dontcopy
 Source: "Texts\CertificateAgreement\de_DE.txt"; DestName: "Certificate_de_DE.txt"; Flags: dontcopy
+Source: "Texts\CertificateAgreement\id_ID.txt"; DestName: "Certificate_id_ID.txt"; Flags: dontcopy
+Source: "Texts\CertificateAgreement\es_ES.txt"; DestName: "Certificate_es_ES.txt"; Flags: dontcopy
+Source: "Texts\CertificateAgreement\ja_JP.txt"; DestName: "Certificate_ja_JP.txt"; Flags: dontcopy
 Source: "Texts\TermsOfService\en_US.txt"; DestName: "Terms_en_US.txt"; Flags: dontcopy
 Source: "Texts\TermsOfService\de_DE.txt"; DestName: "Terms_de_DE.txt"; Flags: dontcopy
+Source: "Texts\TermsOfService\id_ID.txt"; DestName: "Terms_id_ID.txt"; Flags: dontcopy
+Source: "Texts\TermsOfService\es_ES.txt"; DestName: "Terms_es_ES.txt"; Flags: dontcopy
+Source: "Texts\TermsOfService\ja_JP.txt"; DestName: "Terms_ja_JP.txt"; Flags: dontcopy
 
 [Icons]
 Name: "{autoprograms}\Bedrock Cosmos"; Filename: "{app}\{#AppExeName}"
@@ -49,11 +58,17 @@ Root: HKCR; Subkey: "bedrockcosmos\shell\open\command"; ValueType: string; Value
 Root: HKCR; Subkey: ".bcpack"; ValueType: string; ValueName: ""; ValueData: "BedrockCosmos.BCPack"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Pack"; Flags: uninsdeletekey; Languages: english
 Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Paketdatei"; Flags: uninsdeletekey; Languages: german
+Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Berkas paket Bedrock Cosmos"; Flags: uninsdeletekey; Languages: indonesian
+Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Archivo de paquete de Bedrock Cosmos"; Flags: uninsdeletekey; Languages: spanish
+Root: HKCR; Subkey: "BedrockCosmos.BCPack"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos パック ファイル"; Flags: uninsdeletekey; Languages: japanese
 Root: HKCR; Subkey: "BedrockCosmos.BCPack\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\BCPackIcon.ico"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "BedrockCosmos.BCPack\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; Flags: uninsdeletekey
 Root: HKCR; Subkey: ".bcpersona"; ValueType: string; ValueName: ""; ValueData: "BedrockCosmos.BCPersona"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Persona"; Flags: uninsdeletekey; Languages: english
 Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Persona-Datei"; Flags: uninsdeletekey; Languages: german
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Berkas persona Bedrock Cosmos"; Flags: uninsdeletekey; Languages: indonesian
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Archivo de persona de Bedrock Cosmos"; Flags: uninsdeletekey; Languages: spanish
+Root: HKCR; Subkey: "BedrockCosmos.BCPersona"; ValueType: string; ValueName: ""; ValueData: "Bedrock Cosmos Persona ファイル"; Flags: uninsdeletekey; Languages: japanese
 Root: HKCR; Subkey: "BedrockCosmos.BCPersona\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\BCPackIcon.ico"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "BedrockCosmos.BCPersona\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#AppExeName}"" ""%1"""; Flags: uninsdeletekey
 
@@ -65,6 +80,12 @@ function CurrentLanguageCode(): String;
 begin
   if ActiveLanguage = 'german' then
     Result := 'de_DE'
+  else if ActiveLanguage = 'indonesian' then
+    Result := 'id_ID'
+  else if ActiveLanguage = 'spanish' then
+    Result := 'es_ES'
+  else if ActiveLanguage = 'japanese' then
+    Result := 'ja_JP'
   else
     Result := 'en_US';
 end;
@@ -83,6 +104,30 @@ begin
     else if Key = 'CertificateDescription' then Result := 'Please read the following notice before continuing.'
     else Result := Key;
   end;
+end;
+
+function LocalizeCertificateText(Key: String): String;
+begin
+  if ActiveLanguage = 'indonesian' then
+  begin
+    if Key = 'CertificateTitle' then Result := 'Pemberitahuan sertifikat proxy'
+    else if Key = 'CertificateDescription' then Result := 'Harap baca pemberitahuan berikut sebelum melanjutkan.'
+    else Result := Key;
+  end
+  else if ActiveLanguage = 'spanish' then
+  begin
+    if Key = 'CertificateTitle' then Result := 'Aviso sobre el certificado del proxy'
+    else if Key = 'CertificateDescription' then Result := 'Lea el siguiente aviso antes de continuar.'
+    else Result := Key;
+  end
+  else if ActiveLanguage = 'japanese' then
+  begin
+    if Key = 'CertificateTitle' then Result := 'Proxy Certificate Notice'
+    else if Key = 'CertificateDescription' then Result := 'Please read the following notice before continuing.'
+    else Result := Key;
+  end
+  else
+    Result := Localize(Key);
 end;
 
 function ReadLocalizedText(Kind: String): String;
@@ -121,7 +166,7 @@ procedure CurPageChanged(CurPageID: Integer);
 begin
   if CurPageID = wpInfoBefore then
   begin
-    WizardForm.PageNameLabel.Caption := Localize('CertificateTitle');
-    WizardForm.PageDescriptionLabel.Caption := Localize('CertificateDescription');
+    WizardForm.PageNameLabel.Caption := LocalizeCertificateText('CertificateTitle');
+    WizardForm.PageDescriptionLabel.Caption := LocalizeCertificateText('CertificateDescription');
   end;
 end;
