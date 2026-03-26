@@ -1,8 +1,6 @@
 ﻿using BedrockCosmos.App;
 using Newtonsoft.Json.Linq;
-using System;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 // =============================================================================
@@ -97,35 +95,7 @@ namespace BedrockCosmos
             }
         }
 
-        internal static string AppendJsonToSpecificRows(string originalJsonContent, string jsonToAppendPath, string appendLocation, int position)
-        {
-            if (File.Exists(jsonToAppendPath))
-            {
-                string jsonToAppendContent = File.ReadAllText(jsonToAppendPath);
-
-                JObject originalJson = JObject.Parse(originalJsonContent);
-                JObject jsonToAppend = JObject.Parse(jsonToAppendContent);
-
-                // Navigate to ["result"]["layout"][position]["rows"]
-                JArray rowsArray = originalJson["result"]?["layout"]?[position]?["rows"] as JArray;
-
-                if (rowsArray == null)
-                {
-                    CosmosConsole.WriteLine(consoleSender, $"Could not find array at path: 'result.layout[{position}].rows' in in {originalJsonContent}");
-                    return string.Empty;
-                }
-
-                rowsArray.Insert(position, jsonToAppend);
-                return originalJson.ToString();
-            }
-            else
-            {
-                Console.WriteLine($"File not found: {jsonToAppendPath}");
-                return string.Empty;
-            }
-        }
-
-        internal static string AppendJsonToSkinPackMenu(string originalJsonContent, string jsonToAppendPath)
+        internal static string AppendJsonToSkinPackMenu(string originalJsonContent, string jsonToAppendPath, string appendLocation)
         {
             string dividerPath = PathDefinitions.ResponsesDirectory + @"MainPages\VerticalLineDivider_append.json";
 
@@ -136,7 +106,7 @@ namespace BedrockCosmos
                 JObject originalJson = JObject.Parse(originalJsonContent);
                 JObject dividerToAppend = JObject.Parse(dividerToAppendContent);
                 JObject jsonToAppend = JObject.Parse(jsonToAppendContent);
-                JArray targetArray = originalJson["result"]?["layout"]?[0]?["rows"] as JArray;
+                JArray targetArray = (JArray)originalJson.SelectToken(appendLocation);
 
                 if (targetArray != null)
                 {
@@ -147,7 +117,7 @@ namespace BedrockCosmos
                 }
                 else
                 {
-                    CosmosConsole.WriteLine(consoleSender, $"Could not find array at path: 'result.layout[0].rows' in {originalJsonContent}");
+                    CosmosConsole.WriteLine(consoleSender, $"Could not find array at path: {appendLocation} in {originalJsonContent}");
                     return string.Empty;
                 }
             }
