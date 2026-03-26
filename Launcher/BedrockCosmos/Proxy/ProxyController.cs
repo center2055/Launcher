@@ -365,8 +365,8 @@ namespace BedrockCosmos.Proxy
         {
             // Append custom marketplace button to response if accessing a specified marketplace page
             string responseBody = await e.GetResponseBodyAsString();
-            string location = "result.rows"; // Works the same as ["result"]["rows"]
-            string appendedJson = JsonParser.AppendJsonToStart(responseBody, localPath, location);
+            string location = "result.layout"; // Works the same as ["result"]["layout"]
+            string appendedJson = JsonParser.AppendJsonToSpecificRows(responseBody, localPath, location, 0);
             e.SetResponseBodyString(appendedJson);
             //CosmosConsole.WriteLine("Parser", $"Appended response for {e.HttpClient.Request.Url} using {Path.GetFileName(localPath)}");
 
@@ -402,8 +402,7 @@ namespace BedrockCosmos.Proxy
         {
             // Append custom pack to skin packs menu
             string responseBody = await e.GetResponseBodyAsString();
-            string location = "result.rows";
-            string appendedJson = JsonParser.AppendJsonToSkinPackMenu(responseBody, localPath, location);
+            string appendedJson = JsonParser.AppendJsonToSkinPackMenu(responseBody, localPath);
             e.SetResponseBodyString(appendedJson);
             //CosmosConsole.WriteLine("Parser", $"Appended response for {e.HttpClient.Request.Url} using {Path.GetFileName(localPath)}");
 
