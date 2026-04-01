@@ -157,9 +157,9 @@ namespace BedrockCosmos.App
                 }
 
                 if (!Directory.Exists(PathDefinitions.ResponsesDirectory))
-                    Directory.Move(PathDefinitions.CosmosAppData + "Responses-main", PathDefinitions.ResponsesDirectory);
+                    Directory.Move(PathDefinitions.CosmosAppData + "Responses-" + latestResponsesVersionStr, PathDefinitions.ResponsesDirectory);
                 else // Workaround if old directory was not deleted due to accessing elsewhere
-                    await _asyncFileOps.MoveFolderContentsAsync(PathDefinitions.CosmosAppData + "Responses-main", PathDefinitions.ResponsesDirectory, true);
+                    await _asyncFileOps.MoveFolderContentsAsync(PathDefinitions.CosmosAppData + "Responses-" + latestResponsesVersionStr, PathDefinitions.ResponsesDirectory, true);
 
                 File.WriteAllText(PathDefinitions.MiscDirectory + @"ResponsesVersion.txt", latestResponsesVersionStr);
                 _currentResponsesVersion = _latestResponsesVersion;
