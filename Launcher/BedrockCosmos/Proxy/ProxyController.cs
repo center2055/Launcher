@@ -249,6 +249,7 @@ namespace BedrockCosmos.Proxy
                         case ProxyUrlDefinitions.EnchantedUrl:
                         case ProxyUrlDefinitions.GalaxiteUrl:
                         case ProxyUrlDefinitions.LifeboatUrl:
+                        case ProxyUrlDefinitions.MegaSmpUrl:
                         case ProxyUrlDefinitions.MinevilleUrl:
                         case ProxyUrlDefinitions.MobMazeUrl:
                         case ProxyUrlDefinitions.SoulSteelUrl:
@@ -377,19 +378,19 @@ namespace BedrockCosmos.Proxy
         private async Task HandleSessionStartRequest(string localPath, SessionEventArgs e)
         {
             string responseBody = await e.GetResponseBodyAsString();
-            string location = "result.messages";
-            string announcementPath = PathDefinitions.ResponsesDirectory + @"AprilFoolsBanner.json";
+            // string location = "result.messages";
+            // string announcementPath = PathDefinitions.ResponsesDirectory + @"News\LoginAnnouncement_append.json";
             // string newsPath = PathDefinitions.ResponsesDirectory + @"News\CurrentNews_append.json";
 
             NewsManager.RetrieveNewsHistory();
-            string newsTabDataPath = PathDefinitions.CustomJsonsDirectory + @"news.json";
+            string newsTabDataPath = PathDefinitions.CustomJsonsDirectory + @"News.json";
 
             // Append front announcement
-            string appendedJson = JsonParser.AppendJsonToEnd(responseBody, announcementPath, location);
+            //string appendedJson = JsonParser.AppendJsonToEnd(responseBody, announcementPath, location);
 
             // Append news
-            location = "result.inboxSummary.categories";
-            appendedJson = JsonParser.AppendJsonToStart(appendedJson, newsTabDataPath, location);
+            string location = "result.inboxSummary.categories";
+            string appendedJson = JsonParser.AppendJsonToStart(responseBody, newsTabDataPath, location);
 
             e.SetResponseBodyString(appendedJson);
             //CosmosConsole.WriteLine("Parser", $"Appended response for {e.HttpClient.Request.Url} using {Path.GetFileName(localPath)}");
