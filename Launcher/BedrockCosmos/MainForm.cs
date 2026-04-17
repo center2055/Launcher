@@ -24,35 +24,24 @@ namespace BedrockCosmos
 {
     public partial class MainForm : Form
     {
-        private const int SettingsLeftMargin = 20;
-        private const int SettingsRightMargin = 24;
-        private const int SettingsTopMargin = 30;
-        private const int SettingsControlGap = 34;
-        private const int SettingsRowGap = 28;
-        private const int SettingsTitleGap = 8;
-        private const int SettingsBottomMargin = 24;
-
         private LaunchManager launchManager;
         private static ProxyController controller;
         private readonly AsyncFileOperations asyncFileOps;
-        private bool suppressLanguageSelectionChanged;
 
         // For window movement
         bool drag = false;
-        private Point startPoint = new Point(0, 0);
+        Point startPoint = new Point(0, 0);
 
         public MainForm()
         {
             InitializeComponent();
-            SettingsPage.AutoScroll = true;
-            SettingsPage.Resize += SettingsPage_Resize;
-            ApplySettingsVisualStyle();
 
             if (!Directory.Exists(PathDefinitions.CosmosAppData))
                 Directory.CreateDirectory(PathDefinitions.CosmosAppData);
 
             CosmosConsole.Initialize(DevConsole);
             DiscordRichPresence.InitializeRpc();
+            DiscordRichPresence.UpdatePresence();
             launchManager = new LaunchManager();
             controller = new ProxyController();
             asyncFileOps = new AsyncFileOperations();
@@ -65,116 +54,22 @@ namespace BedrockCosmos
             launchManager.InitializeMgrVersionLabel(VersionLabel);
             launchManager.SetCurrentVersions();
 
+            LanguageHandler.Load(PathDefinitions.AppDirectory + @"Texts\" + SettingsManager.Language + ".lang");
+            SettingsManager.LoadSettings();
             ApplySettings();
-            UpdateLauncherLanguage();
-            DiscordRichPresence.UpdatePresence();
+
+            if (File.Exists(PathDefinitions.AppDirectory + @"Background.png"))
+                ApplyLauncherBackground(PathDefinitions.AppDirectory + @"Background.png");
         }
 
-        private void ApplySettingsVisualStyle()
+        private void ApplyLauncherBackground(string imagePath)
         {
-            Font settingsTitleFont = new Font("Segoe UI Semibold", 14F, FontStyle.Regular);
-            Font settingsDescriptionFont = new Font("Segoe UI", 10F, FontStyle.Regular);
-
-            BackgroundModeTitleLabel.Font = settingsTitleFont;
-            LanguageTitleLabel.Font = settingsTitleFont;
-
-            BackgroundModeDescriptionLabel.Font = settingsDescriptionFont;
-            LanguageDescriptionLabel.Font = settingsDescriptionFont;
-
-            BackgroundModeTitleLabel.ForeColor = Color.FromArgb(182, 182, 182);
-            LanguageTitleLabel.ForeColor = Color.FromArgb(182, 182, 182);
-
-            BackgroundModeDescriptionLabel.ForeColor = Color.FromArgb(153, 153, 153);
-            LanguageDescriptionLabel.ForeColor = Color.FromArgb(153, 153, 153);
-        }
-
-        private void SettingsPage_Resize(object sender, EventArgs e)
-        {
-            LayoutSettingsPage();
-        }
-
-        private void LayoutSettingsPage()
-        {
-            if (SettingsPage.ClientSize.Width <= 0)
-                return;
-
-            SettingsPage.SuspendLayout();
-
-            try
-            {
-                BackgroundModeTitleLabel.TextAlign = ContentAlignment.TopLeft;
-                BackgroundModeDescriptionLabel.TextAlign = ContentAlignment.TopLeft;
-                LanguageTitleLabel.TextAlign = ContentAlignment.TopLeft;
-                LanguageDescriptionLabel.TextAlign = ContentAlignment.TopLeft;
-
-                LanguageComboBox.Width = CalculateLanguageComboBoxWidth();
-
-                int controlColumnWidth = Math.Max(160, LanguageComboBox.Width);
-                int textX = SettingsLeftMargin + controlColumnWidth + SettingsControlGap;
-                int textWidth = Math.Max(280, SettingsPage.ClientSize.Width - textX - SettingsRightMargin);
-                int y = SettingsTopMargin;
-
-                y = LayoutSettingsRow(BackgroundModeSwitch, BackgroundModeTitleLabel, BackgroundModeDescriptionLabel, y, controlColumnWidth, textX, textWidth);
-                y += SettingsRowGap;
-                y = LayoutSettingsRow(LanguageComboBox, LanguageTitleLabel, LanguageDescriptionLabel, y, controlColumnWidth, textX, textWidth);
-
-                int backButtonY = Math.Max(y + 24, SettingsPage.ClientSize.Height - SettingsBackButton.Height - SettingsBottomMargin);
-                SettingsBackButton.Location = new Point(15, backButtonY);
-                SettingsPage.AutoScrollMinSize = new Size(0, backButtonY + SettingsBackButton.Height + SettingsBottomMargin);
-            }
-            finally
-            {
-                SettingsPage.ResumeLayout();
-            }
-        }
-
-        private int LayoutSettingsRow(Control leadingControl, Label titleLabel, Label descriptionLabel, int top, int controlColumnWidth, int textX, int textWidth)
-        {
-            int titleHeight = MeasureTextHeight(titleLabel.Text, titleLabel.Font, textWidth);
-            int descriptionY = top + titleHeight + SettingsTitleGap;
-            int descriptionHeight = MeasureTextHeight(descriptionLabel.Text, descriptionLabel.Font, textWidth);
-            int textBlockHeight = titleHeight + SettingsTitleGap + descriptionHeight;
-
-            int controlX = SettingsLeftMargin + Math.Max(0, (controlColumnWidth - leadingControl.Width) / 2);
-            int controlY = top + Math.Max(0, (textBlockHeight - leadingControl.Height) / 2);
-
-            leadingControl.Location = new Point(controlX, controlY);
-            titleLabel.SetBounds(textX, top, textWidth, titleHeight);
-            descriptionLabel.SetBounds(textX, descriptionY, textWidth, descriptionHeight);
-
-            return top + Math.Max(textBlockHeight, leadingControl.Height);
-        }
-
-        private int CalculateLanguageComboBoxWidth()
-        {
-            int widestItem = 0;
-
-            foreach (object item in LanguageComboBox.Items)
-            {
-                string itemText = item?.ToString() ?? string.Empty;
-                widestItem = Math.Max(widestItem, TextRenderer.MeasureText(itemText, LanguageComboBox.Font).Width);
-            }
-
-            return Clamp(widestItem + 48, 160, 210);
-        }
-
-        private static int MeasureTextHeight(string text, Font font, int width)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return Math.Max(font.Height + 4, 24);
-
-            Size measured = TextRenderer.MeasureText(
-                text,
-                font,
-                new Size(Math.Max(1, width), int.MaxValue),
-                TextFormatFlags.WordBreak | TextFormatFlags.NoPadding);
-
-            return Math.Max(font.Height + 4, measured.Height + 2);
-        }
-
-        private static int Clamp(int value, int minimum, int maximum)
-        {
-            return Math.Max(minimum, Math.Min(maximum, value));
+            Image background = Image.FromFile(imagePath);
+            HomePage.BackgroundImage = background;
+            AboutPage.BackgroundImage = background;
+            SettingsPage.BackgroundImage = background;
+            UpdatePage.BackgroundImage = background;
+            DevPage.BackgroundImage = background;
         }
 
         public void HandleIncomingArgs(string[] args)
